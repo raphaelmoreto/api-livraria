@@ -1,0 +1,19 @@
+CREATE DATABASE livraria
+
+USE livraria
+
+CREATE TABLE autor (
+	id INT IDENTITY PRIMARY KEY,
+	nome VARCHAR(100)
+)
+
+CREATE TABLE livro (
+	id INT IDENTITY PRIMARY KEY,
+	titulo VARCHAR(100),
+	ano_publicacao DATE,
+	fk_autor INT
+)
+
+ALTER TABLE livro
+ADD CONSTRAINT fk_livro_autor
+FOREIGN KEY (fk_autor) REFERENCES autor (id)
