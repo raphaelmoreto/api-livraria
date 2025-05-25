@@ -51,5 +51,25 @@ namespace Repositorys
                 throw new Exception("ERRO! " + e.Message);
             }
         }
+
+        public async Task<Autor?> BuscaPorId(int id)
+        {
+            try
+            {
+                using var connection = _dbConnection.GetConnection();
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT * ");
+                sb.Append("FROM autor ");
+                sb.Append("WHERE id = @id");
+
+                var autor = await connection.QueryFirstOrDefaultAsync<Autor>(sb.ToString(), new { id });
+                return autor;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO! " + e.Message);
+            }
+        }
     }
 }

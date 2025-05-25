@@ -49,5 +49,16 @@ namespace Controllers
 
             return Ok(autores);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Autor>> BuscarAutoresPorId(int id)
+        {
+            var autor = await _autorRepository.BuscaPorId(id);
+
+            if (autor is null)
+                return NoContent();
+
+            return Ok(autor);
+        }
     }
 }
