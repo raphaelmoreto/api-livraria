@@ -1,6 +1,4 @@
-﻿using Database;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Models;
 using Repositorys;
 
@@ -42,7 +40,7 @@ namespace Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Autor>>> BuscarTodosAutores()
         {
-            var autores = (await _autorRepository.BuscarAutores()).ToList();
+            var autores = (await _autorRepository.GetAutoresAsync()).ToList();
 
             if (autores is null || autores.Count == 0)
                 return NoContent();
@@ -53,12 +51,34 @@ namespace Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Autor>> BuscarAutoresPorId(int id)
         {
-            var autor = await _autorRepository.BuscaPorId(id);
+            var autor = await _autorRepository.GetPorIdAsync(id);
 
             if (autor is null)
                 return NoContent();
 
             return Ok(autor);
+        }
+
+        [HttpPut("{idAutor}")]
+        public async Task<ActionResult<bool>> AtualizarAutor([FromBody] Autor autor, int idAutor)
+        {
+            var autorAtualizado = await _autorRepository.PutAutorAsync(autor, idAutor);
+
+            if (!autorAtualizado)
+                return BadRequest();
+
+            return Ok();
+        }
+
+        [HttpDelete("{idAutor}")]
+        public async Task<ActionResult<bool>> DeletarAutor(int idAutor)
+        {
+            var autorDeletado = await _autorRepository.DeleteAutorAsync(idAutor);
+
+            if (!autorDeletado)
+                return BadRequest();
+
+            return Ok();
         }
     }
 }

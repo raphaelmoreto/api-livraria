@@ -33,7 +33,7 @@ namespace Repositorys
             }
         }
 
-        public async Task<IEnumerable<Autor>> BuscarAutores()
+        public async Task<IEnumerable<Autor>> GetAutoresAsync()
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Repositorys
             }
         }
 
-        public async Task<Autor?> BuscaPorId(int id)
+        public async Task<Autor?> GetPorIdAsync(int id)
         {
             try
             {
@@ -69,6 +69,52 @@ namespace Repositorys
             catch (Exception e)
             {
                 throw new Exception("ERRO! " + e.Message);
+            }
+        }
+
+        public async Task<bool> PutAutorAsync(Autor autor, int idAutor)
+        {
+            try
+            {
+                using var connection = _dbConnection.GetConnection();
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("UPDATE autor ");
+                sb.Append("SET nome = @nome ");
+                sb.Append("WHERE id = @id");
+
+                var parameters = new
+                {
+                    id = idAutor,
+                    nome = autor.Nome.ToUpper()
+                };
+
+                var autorAtualizado = await connection.ExecuteAsync(sb.ToString(), parameters);
+                return autorAtualizado > 0;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO! " + e.Message);
+            }
+        }
+
+        public async Task<bool> DeleteAutorAsync(int idAutor)
+        {
+            try
+            {
+                using var connection = _dbConnection.GetConnection();
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("UPDATE autor ");
+                sb.Append("SET status_autor = 0 ");
+                sb.Append("WHERE id = @idAutor");
+
+                var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { idAutor });
+                return linhasAfetadas > 0;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ERRO!" + e.Message);
             }
         }
     }
