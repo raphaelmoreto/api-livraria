@@ -13,6 +13,8 @@ builder.Services.AddSwaggerGen();
 // UMA NOVA INSTÂNCIA DE "DatabaseConnection" É CRIADA PARA CADA REQUISIÇÃO HTTP
 builder.Services.AddScoped<DatabaseConnection>();
 
+builder.Services.AddScoped<Repositorys.AutorRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

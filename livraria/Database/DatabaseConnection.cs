@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace Database
 {
@@ -12,11 +12,13 @@ namespace Database
         public DatabaseConnection(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+            // O "!" NO FINAL DA LINHA GARANTE QUE A CONEXÃO COM O BANCO NÃO SERÁ NULA
+            _connectionString = _configuration.GetConnectionString("DefaultConnection")!;
         }
 
         //O TIPO DE RETORNO "IDbConnection" É UMA INTERFACE COMUM PARA CONEXÕES COM BANCO DE DADOS
-        public IDbConnection CreateConnection()
+        public IDbConnection GetConnection()
         {
             return new SqlConnection(_connectionString);
         }
