@@ -27,10 +27,28 @@ namespace Repositorys
                 var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { nome = autor.Nome.ToUpper()});
                 return linhasAfetadas > 0;
             }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<IEnumerable<Autor>> BuscarAutores()
+        {
+            try
+            {
+                using var connection = _dbConnection.GetConnection();
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("SELECT * ");
+                sb.Append("FROM autor");
+
+                var listaAutores = await connection.QueryAsync<Autor>(sb.ToString());
+                return listaAutores;
+            }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message.ToString());
-                return false;
+                throw new Exception("ERRO! " + e.Message);
             }
         }
     }
