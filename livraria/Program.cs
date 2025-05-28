@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<DatabaseConnection>();
 
 builder.Services.AddScoped<IAutorRepository, Repositorys.AutorRepository>();
+builder.Services.AddScoped<ILivroRepository, Repositorys.LivroRepository>();
 
 var app = builder.Build();
 

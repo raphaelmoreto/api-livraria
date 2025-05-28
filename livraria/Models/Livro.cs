@@ -6,15 +6,19 @@
 
         public string Titulo { get; set; } = string.Empty;
 
-        public DateTime AnoPublicacao { get; set; }
+        public DateTime? AnoPublicacao { get; set; }
         
-        public Autor Autor { get; set; }
+        public int? IdAutor { get; set; }
 
-        public Livro(string titulo, DateTime anoPublicacao, Autor autor)
+        public Livro()
+        {
+        }
+
+        public Livro(string titulo, DateTime anoPublicacao, int idAutor)
         {
             Titulo = titulo;
             AnoPublicacao = anoPublicacao;
-            Autor = autor;
+            IdAutor = idAutor;
         }
     }
 }

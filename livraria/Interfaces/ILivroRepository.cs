@@ -6,9 +6,9 @@ namespace Interfaces
     {
         Task<bool> InsertLivroAsync(Livro livro);
 
-        Task<Livro> GetLivrosAsync();
+        Task<IEnumerable<Livro>> GetLivrosAsync();
 
-        Task<Livro> GetLivroPorIdAsync(int id);
+        Task<IEnumerable<Livro>> GetLivroPorIdAsync(int id);
 
         Task<bool> PutLivroAsync(Livro livro, int id);
 
