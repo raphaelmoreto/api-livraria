@@ -1,4 +1,4 @@
-﻿namespace Models.Livro
+﻿namespace Models
 {
     public class Livro
     {

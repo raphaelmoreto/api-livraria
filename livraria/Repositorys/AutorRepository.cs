@@ -2,10 +2,11 @@
 using Dapper;
 using Database;
 using Models;
+using Interfaces;
 
 namespace Repositorys
 {
-    public class AutorRepository
+    public class AutorRepository : IAutorRepository
     {
         private readonly DatabaseConnection _dbConnection;
 
@@ -21,15 +22,15 @@ namespace Repositorys
                 using var connection = _dbConnection.GetConnection();
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append("INSERT INTO autor (nome)");
-                sb.Append("                  VALUES (@nome)");
+                sb.AppendLine("INSERT INTO autor (nome)");
+                sb.AppendLine("                  VALUES (@nome)");
 
                 var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { nome = autor.Nome.ToUpper()});
                 return linhasAfetadas > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -41,14 +42,14 @@ namespace Repositorys
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append("SELECT * ");
-                sb.Append("FROM autor");
+                sb.AppendLine("FROM autor");
 
                 var listaAutores = await connection.QueryAsync<Autor>(sb.ToString());
                 return listaAutores;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception("ERRO! " + e.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -59,16 +60,16 @@ namespace Repositorys
                 using var connection = _dbConnection.GetConnection();
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append("SELECT * ");
-                sb.Append("FROM autor ");
-                sb.Append("WHERE id = @id");
+                sb.AppendLine("SELECT * ");
+                sb.AppendLine("FROM autor ");
+                sb.AppendLine("WHERE id = @id");
 
                 var autor = await connection.QueryFirstOrDefaultAsync<Autor>(sb.ToString(), new { id });
                 return autor;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception("ERRO! " + e.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -79,9 +80,9 @@ namespace Repositorys
                 using var connection = _dbConnection.GetConnection();
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append("UPDATE autor ");
-                sb.Append("SET nome = @nome ");
-                sb.Append("WHERE id = @id");
+                sb.AppendLine("UPDATE autor ");
+                sb.AppendLine("SET nome = @nome ");
+                sb.AppendLine("WHERE id = @id");
 
                 var parameters = new
                 {
@@ -92,9 +93,9 @@ namespace Repositorys
                 var autorAtualizado = await connection.ExecuteAsync(sb.ToString(), parameters);
                 return autorAtualizado > 0;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception("ERRO! " + e.Message);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -105,16 +106,16 @@ namespace Repositorys
                 using var connection = _dbConnection.GetConnection();
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append("UPDATE autor ");
-                sb.Append("SET status_autor = 0 ");
-                sb.Append("WHERE id = @idAutor");
+                sb.AppendLine("UPDATE autor ");
+                sb.AppendLine("SET status_autor = 0 ");
+                sb.AppendLine("WHERE id = @idAutor");
 
                 var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { idAutor });
                 return linhasAfetadas > 0;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception("ERRO!" + e.Message);
+                throw new Exception(ex.Message);
             }
         }
     }

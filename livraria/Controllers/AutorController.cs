@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
-using Repositorys;
+using Interfaces;
 
 namespace Controllers
 {
@@ -8,9 +8,9 @@ namespace Controllers
     [Route("api/[controller]")] //DEFINIÇÃO DA ROTA. "api/" É UM PREFIXO DA ROTA E O "[controller]" É UM PLACEHOLDER QUE SERÁ SUBSTITUÍDO PELO NOME DO CONTROLLER ("api/autor")
     public class AutorController : ControllerBase
     {
-        private readonly AutorRepository _autorRepository;
+        private readonly IAutorRepository _autorRepository;
 
-        public AutorController(AutorRepository autorRepository)
+        public AutorController(IAutorRepository autorRepository)
         {
             _autorRepository = autorRepository;
         }
@@ -25,60 +25,95 @@ namespace Controllers
                 return BadRequest("NOME DO AUTOR VÁZIO");
             }
 
-            bool insercao = await _autorRepository.InsertAutorAsync(autor);
+            try
+            {
+                bool insercao = await _autorRepository.InsertAutorAsync(autor);
 
-            if (insercao)
-            {
-                return Ok();
+                if (insercao)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return Conflict(); //INDICA QUE A REQUISIÇÃO NÃO PODE SER COMPLETADA DEVIDO A UM CONFLITO
+                }
             }
-            else
-            {
-                return Conflict(); //INDICA QUE A REQUISIÇÃO NÃO PODE SER COMPLETADA DEVIDO A UM CONFLITO
+            catch (Exception ex)
+            { 
+                return StatusCode(500, ex.Message);
             }
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Autor>>> BuscarTodosAutores()
         {
-            var autores = (await _autorRepository.GetAutoresAsync()).ToList();
+            try
+            {
+                var autores = (await _autorRepository.GetAutoresAsync()).ToList();
 
-            if (autores is null || autores.Count == 0)
-                return NoContent();
+                if (autores is null || autores.Count == 0)
+                    return NoContent();
 
-            return Ok(autores);
+                return Ok(autores);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Autor>> BuscarAutoresPorId(int id)
         {
-            var autor = await _autorRepository.GetPorIdAsync(id);
+            try
+            {
+                var autor = await _autorRepository.GetPorIdAsync(id);
 
-            if (autor is null)
-                return NoContent();
+                if (autor is null)
+                    return NoContent();
 
-            return Ok(autor);
+                return Ok(autor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPut("{idAutor}")]
         public async Task<ActionResult<bool>> AtualizarAutor([FromBody] Autor autor, int idAutor)
         {
-            var autorAtualizado = await _autorRepository.PutAutorAsync(autor, idAutor);
+            try
+            {
+                var autorAtualizado = await _autorRepository.PutAutorAsync(autor, idAutor);
 
-            if (!autorAtualizado)
-                return BadRequest();
+                if (!autorAtualizado)
+                    return BadRequest();
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception ex)
+{
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpDelete("{idAutor}")]
         public async Task<ActionResult<bool>> DeletarAutor(int idAutor)
         {
-            var autorDeletado = await _autorRepository.DeleteAutorAsync(idAutor);
+            try
+            {
+                var autorDeletado = await _autorRepository.DeleteAutorAsync(idAutor);
 
-            if (!autorDeletado)
-                return BadRequest();
+                if (!autorDeletado)
+                    return BadRequest();
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500,  ex.Message);
+            }
         }
     }
 }
