@@ -2,7 +2,7 @@
 using Dapper;
 using Database;
 using Models;
-using Interfaces;
+using Repository.InterfaceAutor;
 
 namespace Repositorys
 {
@@ -15,17 +15,44 @@ namespace Repositorys
             _dbConnection = dbConnection;
         }
 
-        public async Task<bool> InsertAutorAsync(Autor autor)
+        public async Task<bool> AtualizarAutor(string nomeAutor, int idAutor)
         {
             try
             {
                 using var connection = _dbConnection.GetConnection();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine("INSERT INTO autor (nome)");
-                sb.AppendLine("                  VALUES (@nome)");
+                sb.AppendLine("UPDATE autor");
+                sb.AppendLine("SET nome = @nomeAutor");
+                sb.AppendLine("WHERE id = @idAutor");
 
-                var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { nome = autor.Nome.ToUpper()});
+                var parameters = new
+                {
+                    idAutor = idAutor,
+                    nomeAutor = nomeAutor.ToUpper()
+                };
+
+                var autorAtualizado = await connection.ExecuteAsync(sb.ToString(), parameters);
+                return autorAtualizado > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> DeletarAutor(int idAutor)
+        {
+            try
+            {
+                using var connection = _dbConnection.GetConnection();
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("UPDATE autor");
+                sb.AppendLine("SET status_autor = 0");
+                sb.AppendLine("WHERE id = @idAutor");
+
+                var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { idAutor });
                 return linhasAfetadas > 0;
             }
             catch (Exception ex)
@@ -34,18 +61,18 @@ namespace Repositorys
             }
         }
 
-        public async Task<IEnumerable<Autor>> GetAutoresAsync()
+        public async Task<bool> InserirAutor(string nomeAutor)
         {
             try
             {
                 using var connection = _dbConnection.GetConnection();
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append("SELECT * ");
-                sb.AppendLine("FROM autor");
+                sb.AppendLine("INSERT INTO autor (nome)");
+                sb.AppendLine("                  VALUES (@nomeAutor)");
 
-                var listaAutores = await connection.QueryAsync<Autor>(sb.ToString());
-                return listaAutores;
+                var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { nomeAutor = nomeAutor.ToUpper() });
+                return linhasAfetadas > 0;
             }
             catch (Exception ex)
             {
@@ -53,14 +80,37 @@ namespace Repositorys
             }
         }
 
-        public async Task<Autor?> GetPorIdAsync(int id)
+        public async Task<IEnumerable<Autor>> SelecionarAutores()
         {
             try
             {
                 using var connection = _dbConnection.GetConnection();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine("SELECT * ");
+                sb.AppendLine("SELECT id");
+                sb.AppendLine("           nome,");
+                sb.AppendLine("           status_autor AS statusAutor");
+                sb.AppendLine("FROM autor");
+
+                var autores = await connection.QueryAsync<Autor>(sb.ToString());
+                return autores;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<Autor?> SelecionarAutorPorId(int id)
+        {
+            try
+            {
+                using var connection = _dbConnection.GetConnection();
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("SELECT id,");
+                sb.AppendLine("           nome,");
+                sb.AppendLine("           status_autor AS statusAutor");
                 sb.AppendLine("FROM autor ");
                 sb.AppendLine("WHERE id = @id");
 
@@ -73,45 +123,19 @@ namespace Repositorys
             }
         }
 
-        public async Task<bool> PutAutorAsync(Autor autor, int idAutor)
+        public async Task<bool> SelecionarAutorPorNome(string nomeAutor)
         {
             try
             {
                 using var connection = _dbConnection.GetConnection();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine("UPDATE autor ");
-                sb.AppendLine("SET nome = @nome ");
-                sb.AppendLine("WHERE id = @id");
+                sb.AppendLine("SELECT COUNT(nome)");
+                sb.AppendLine("FROM autor");
+                sb.AppendLine("WHERE nome = @nomeAutor");
 
-                var parameters = new
-                {
-                    id = idAutor,
-                    nome = autor.Nome.ToUpper()
-                };
-
-                var autorAtualizado = await connection.ExecuteAsync(sb.ToString(), parameters);
-                return autorAtualizado > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<bool> DeleteAutorAsync(int idAutor)
-        {
-            try
-            {
-                using var connection = _dbConnection.GetConnection();
-
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine("UPDATE autor ");
-                sb.AppendLine("SET status_autor = 0 ");
-                sb.AppendLine("WHERE id = @idAutor");
-
-                var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { idAutor });
-                return linhasAfetadas > 0;
+                var retorno = await connection.QueryFirstOrDefaultAsync<int>(sb.ToString(), new { nomeAutor });
+                return retorno > 0;
             }
             catch (Exception ex)
             {

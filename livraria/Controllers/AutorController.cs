@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
-using Interfaces;
+using Service.InterfaceAutor;
 
 namespace Controllers
 {
@@ -8,112 +8,55 @@ namespace Controllers
     [Route("api/[controller]")] //DEFINIÇÃO DA ROTA. "api/" É UM PREFIXO DA ROTA E O "[controller]" É UM PLACEHOLDER QUE SERÁ SUBSTITUÍDO PELO NOME DO CONTROLLER ("api/autor")
     public class AutorController : ControllerBase
     {
-        private readonly IAutorRepository _autorRepository;
+        private readonly IAutorService _autorService;
 
-        public AutorController(IAutorRepository autorRepository)
+        public AutorController(IAutorService autorService)
         {
-            _autorRepository = autorRepository;
+            _autorService = autorService;
         }
 
         //O "IActionResult" É UM TIPO GENÉRICO DE RETORNO PARA MÉTODOS DE CONTROLLERS QUE REPRESENTAM QUALQUER TIPO DE RESPOSTA HTTP
 
         [HttpPost]
-        public async Task<ActionResult> CriarAutor([FromBody] Autor autor)
+        public async Task<IActionResult> CriarAutor([FromBody] Autor autor)
         {
-            if (string.IsNullOrEmpty(autor.Nome))
-            {
-                return BadRequest("NOME DO AUTOR VÁZIO");
-            }
-
             try
             {
-                bool insercao = await _autorRepository.InsertAutorAsync(autor);
-
-                if (insercao)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return Conflict(); //INDICA QUE A REQUISIÇÃO NÃO PODE SER COMPLETADA DEVIDO A UM CONFLITO
-                }
+                bool cadastro = await _autorService.CadastrarAutor(autor.Nome);
+                return cadastro ? Ok("autor cadastrado com sucesso") : Conflict("autor já existe no banco");
             }
             catch (Exception ex)
-            { 
+            {
                 return StatusCode(500, ex.Message);
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Autor>>> BuscarTodosAutores()
+        public async Task<IActionResult> BuscarTodosAutores()
         {
-            try
-            {
-                var autores = (await _autorRepository.GetAutoresAsync()).ToList();
-
-                if (autores is null || autores.Count == 0)
-                    return NoContent();
-
-                return Ok(autores);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var autores = await _autorService.ObterTodosAutores();
+            return Ok(autores);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Autor>> BuscarAutoresPorId(int id)
+        [HttpGet("{idAutor}")]
+        public async Task<IActionResult> BuscarAutorPorId([FromRoute] int idAutor)
         {
-            try
-            {
-                var autor = await _autorRepository.GetPorIdAsync(id);
-
-                if (autor is null)
-                    return NoContent();
-
-                return Ok(autor);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var autor = await _autorService.ObterAutorPorId(idAutor);
+            return autor  != null ? Ok(autor) : NoContent();
         }
 
         [HttpPut("{idAutor}")]
-        public async Task<ActionResult<bool>> AtualizarAutor([FromBody] Autor autor, int idAutor)
+        public async Task<IActionResult> AtualizarAutor([FromBody] Autor autor, [FromRoute] int idAutor)
         {
-            try
-            {
-                var autorAtualizado = await _autorRepository.PutAutorAsync(autor, idAutor);
-
-                if (!autorAtualizado)
-                    return BadRequest();
-
-                return Ok();
-            }
-            catch (Exception ex)
-{
-                return StatusCode(500, ex.Message);
-            }
+            var atualizarAutor = await _autorService.AtualizarAutor(autor.Nome, idAutor);
+            return Ok();
         }
 
         [HttpDelete("{idAutor}")]
-        public async Task<ActionResult<bool>> DeletarAutor(int idAutor)
+        public async Task<IActionResult> DeletarAutor([FromRoute] int idAutor)
         {
-            try
-            {
-                var autorDeletado = await _autorRepository.DeleteAutorAsync(idAutor);
-
-                if (!autorDeletado)
-                    return BadRequest();
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500,  ex.Message);
-            }
+            var autorDeletado = await _autorService.ExcluirAutor(idAutor);
+            return  NoContent();
         }
     }
 }

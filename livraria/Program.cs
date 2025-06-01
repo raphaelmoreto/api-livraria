@@ -1,6 +1,7 @@
 using System.Runtime.Intrinsics.X86;
 using Database;
-using Interfaces;
+using Service.InterfaceAutor;
+using Repository.InterfaceAutor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +15,8 @@ builder.Services.AddSwaggerGen();
 // UMA NOVA INSTÂNCIA DE "DatabaseConnection" É CRIADA PARA CADA REQUISIÇÃO HTTP
 builder.Services.AddScoped<DatabaseConnection>();
 
+builder.Services.AddScoped<IAutorService, Services.AutorService>();
 builder.Services.AddScoped<IAutorRepository, Repositorys.AutorRepository>();
-builder.Services.AddScoped<ILivroRepository, Repositorys.LivroRepository>();
 
 var app = builder.Build();
 
