@@ -23,7 +23,7 @@ namespace Services
             if (verificarNomeAutor)
                 return false;
 
-            return await _autorRepository.AtualizarAutor(nomeAutor, idAutor); ;
+            return await _autorRepository.AtualizarAutor(nomeAutor, idAutor);
         }
 
         public async Task<bool> CadastrarAutor(string nomeAutor)
@@ -41,11 +41,7 @@ namespace Services
 
         public async Task<bool> ExcluirAutor(int idAutor)
         {
-            if (idAutor == 0)
-                return false;
-
-            var resultado = await _autorRepository.DeletarAutor(idAutor);
-            return resultado;
+            return await _autorRepository.DeletarAutor(idAutor);
         }
 
         public async Task<Autor?> ObterAutorPorId(int idAutor)

@@ -28,7 +28,7 @@ namespace Repositorys
 
                 var parameters = new
                 {
-                    idAutor = idAutor,
+                    idAutor,
                     nomeAutor = nomeAutor.ToUpper()
                 };
 
