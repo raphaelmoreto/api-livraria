@@ -8,7 +8,7 @@ namespace Repository.InterfaceAutor
 
         Task<IEnumerable<Autor>> SelecionarAutores();
 
-        Task<Autor?> SelecionarAutorPorId(int id);
+        Task<Autor?> SelecionarAutorPorId(int idAutor);
 
         Task<bool> SelecionarAutorPorNome(string nomeAutor);
 

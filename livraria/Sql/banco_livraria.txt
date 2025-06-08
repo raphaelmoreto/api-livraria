@@ -7,36 +7,36 @@ GO
 CREATE TABLE autor (
 	id INT IDENTITY PRIMARY KEY,
 	nome VARCHAR (100) NOT NULL,
-	status_autor BIT
+	status_autor BIT DEFAULT 1
 )
 
 CREATE TABLE livro (
 	id INT IDENTITY PRIMARY KEY,
 	titulo VARCHAR(100) NOT NULL,
 	ano_publicacao DATE NOT NULL,
-	fk_autor INT NOT NULL
+	fk_autor INT
 )
 
 ALTER TABLE livro
 ADD CONSTRAINT fk_livro_autor
 FOREIGN KEY (fk_autor) REFERENCES autor (id)
 
-INSERT INTO autor (nome)
-		   VALUES ('WILLIAM SHAKESPEARE'),
-				  ('JANE AUSTEN'),
-				  ('GABRIEL GARCÍA MÁRQUEZ'),
-				  ('FRANZ KAFKA'),
-				  ('VIRGINIA WOOLF'),
-				  ('MACHADO DE ASSIS'),
-				  ('GEORGE ORWELL'),
-				  ('CLARICE LISPECTOR'),
-				  ('ERNEST HEMINGWAY'),
-				  ('FYODOR DOSTOEVSKY'),
-				  ('J.K. ROWLING'),
-				  ('ALBERT CAMUS'),
-				  ('JOSÉ SARAMAGO'),
-				  ('LEO TOLSTOY'),
-				  ('HARUKI MURAKAMI');
+INSERT INTO autor (nome, status_autor)
+		   VALUES ('WILLIAM SHAKESPEARE', 1),
+				  ('JANE AUSTEN', 1),
+				  ('GABRIEL GARCÍA MÁRQUEZ', 1),
+				  ('FRANZ KAFKA', 1),
+				  ('VIRGINIA WOOLF', 1),
+				  ('MACHADO DE ASSIS', 1),
+				  ('GEORGE ORWELL', 1),
+				  ('CLARICE LISPECTOR', 1),
+				  ('ERNEST HEMINGWAY', 1),
+				  ('FYODOR DOSTOEVSKY', 1),
+				  ('J.K. ROWLING', 1),
+				  ('ALBERT CAMUS', 1),
+				  ('JOSÉ SARAMAGO', 1),
+				  ('LEO TOLSTOY', 1),
+				  ('HARUKI MURAKAMI', 1);
 
 INSERT INTO livro (titulo, ano_publicacao, fk_autor)
 		   VALUES ('HAMLET', '1603-01-01', 1),

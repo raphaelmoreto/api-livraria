@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Models;
+using Dtos.Autor;
 using Service.InterfaceAutor;
 
 namespace Controllers
@@ -18,45 +18,68 @@ namespace Controllers
         //O "IActionResult" É UM TIPO GENÉRICO DE RETORNO PARA MÉTODOS DE CONTROLLERS QUE REPRESENTAM QUALQUER TIPO DE RESPOSTA HTTP
 
         [HttpPost]
-        public async Task<IActionResult> CriarAutor([FromBody] Autor autor)
+        public async Task<IActionResult> PostAutor([FromBody] CadastrarAutorDto autorNome)
         {
-            try
+            var cadastroAutor = await _autorService.CadastrarAutor(autorNome);
+
+            if (cadastroAutor.Status == false)
             {
-                bool cadastro = await _autorService.CadastrarAutor(autor.Nome);
-                return cadastro ? Ok("autor cadastrado com sucesso") : Conflict("autor já existe no banco");
+                return Conflict(cadastroAutor);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+
+            return Ok(cadastroAutor);
         }
 
         [HttpGet]
-        public async Task<IActionResult> BuscarTodosAutores()
+        public async Task<IActionResult> GetTodosAutores()
         {
             var autores = await _autorService.ObterTodosAutores();
+
+            if (autores.Status == false)
+            {
+                return NotFound(autores);
+            }
+
             return Ok(autores);
         }
 
         [HttpGet("{idAutor}")]
-        public async Task<IActionResult> BuscarAutorPorId([FromRoute] int idAutor)
+        public async Task<IActionResult> GetAutorPorId([FromRoute] int idAutor)
         {
             var autor = await _autorService.ObterAutorPorId(idAutor);
-            return autor  != null ? Ok(autor) : NoContent();
+            
+            if (autor.Status == false)
+            {
+                return NotFound(autor);
+            }
+
+            return Ok(autor);
         }
 
         [HttpPut("{idAutor}")]
-        public async Task<IActionResult> AtualizarAutor([FromBody] Autor autor, [FromRoute] int idAutor)
+        public async Task<IActionResult> AtualizarAutor([FromBody] AtualizarAutorDto autorNome, [FromRoute] int idAutor)
         {
-            var atualizarAutor = await _autorService.AtualizarAutor(autor.Nome, idAutor);
-            return Ok();
+            var autorAtualizado = await _autorService.AtualizarAutor(autorNome, idAutor);
+
+            if (autorAtualizado.Status == false)
+            {
+                return Conflict(autorAtualizado);
+            }
+
+            return Ok(autorAtualizado);
         }
 
         [HttpDelete("{idAutor}")]
-        public async Task<IActionResult> DeletarAutor([FromRoute] int idAutor)
+        public async Task<IActionResult> DeletAutor([FromRoute] int idAutor)
         {
             var autorDeletado = await _autorService.ExcluirAutor(idAutor);
-            return  NoContent();
+
+            if (autorDeletado.Status == false)
+            {
+                return Conflict(autorDeletado);
+            }
+
+            return Ok(autorDeletado);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Repositorys
             _dbConnection = dbConnection;
         }
 
-        public async Task<bool> AtualizarAutor(string nomeAutor, int idAutor)
+        public async Task<bool> AtualizarAutor(string autorNome, int idAutor)
         {
             try
             {
@@ -23,13 +23,13 @@ namespace Repositorys
 
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("UPDATE autor");
-                sb.AppendLine("SET nome = @nomeAutor");
+                sb.AppendLine("SET nome = @autorNome");
                 sb.AppendLine("WHERE id = @idAutor");
 
                 var parameters = new
                 {
                     idAutor,
-                    nomeAutor = nomeAutor.ToUpper()
+                    autorNome = autorNome.ToUpper()
                 };
 
                 var autorAtualizado = await connection.ExecuteAsync(sb.ToString(), parameters);
@@ -87,9 +87,9 @@ namespace Repositorys
                 using var connection = _dbConnection.GetConnection();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine("SELECT id");
+                sb.AppendLine("SELECT id,");
                 sb.AppendLine("           nome,");
-                sb.AppendLine("           status_autor AS statusAutor");
+                sb.AppendLine("           status_autor AS 'statusAutor'");
                 sb.AppendLine("FROM autor");
 
                 var autores = await connection.QueryAsync<Autor>(sb.ToString());
@@ -101,7 +101,7 @@ namespace Repositorys
             }
         }
 
-        public async Task<Autor?> SelecionarAutorPorId(int id)
+        public async Task<Autor?> SelecionarAutorPorId(int idAutor)
         {
             try
             {
@@ -111,10 +111,10 @@ namespace Repositorys
                 sb.AppendLine("SELECT id,");
                 sb.AppendLine("           nome,");
                 sb.AppendLine("           status_autor AS statusAutor");
-                sb.AppendLine("FROM autor ");
-                sb.AppendLine("WHERE id = @id");
+                sb.AppendLine("FROM autor");
+                sb.AppendLine("WHERE id = @idAutor");
 
-                var autor = await connection.QueryFirstOrDefaultAsync<Autor>(sb.ToString(), new { id });
+                var autor = await connection.QueryFirstOrDefaultAsync<Autor>(sb.ToString(), new { idAutor });
                 return autor;
             }
             catch (Exception ex)
@@ -123,7 +123,7 @@ namespace Repositorys
             }
         }
 
-        public async Task<bool> SelecionarAutorPorNome(string nomeAutor)
+        public async Task<bool> SelecionarAutorPorNome(string autorNome)
         {
             try
             {
@@ -132,9 +132,9 @@ namespace Repositorys
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("SELECT COUNT(nome)");
                 sb.AppendLine("FROM autor");
-                sb.AppendLine("WHERE nome = @nomeAutor");
+                sb.AppendLine("WHERE nome = @autorNome");
 
-                var retorno = await connection.QueryFirstOrDefaultAsync<int>(sb.ToString(), new { nomeAutor });
+                var retorno = await connection.QueryFirstOrDefaultAsync<int>(sb.ToString(), new { autorNome = autorNome.ToUpper() });
                 return retorno > 0;
             }
             catch (Exception ex)
