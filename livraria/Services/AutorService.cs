@@ -21,122 +21,167 @@ namespace Services
         {
             Response<AtualizarAutorDto> response = new Response<AtualizarAutorDto>();
 
-            if (string.IsNullOrEmpty(autorNome.Nome))
+            try
             {
-                response.Mensagem = "nome do autor nulo/vázio!";
+                if (string.IsNullOrEmpty(autorNome.Nome))
+                {
+                    response.Mensagem = "nome do autor nulo/vázio!";
+                    response.Status = false;
+                    return response;
+                }
+
+                var validarAutor = await _autorRepository.SelecionarAutorPorNome(autorNome.Nome);
+
+                if (validarAutor)
+                {
+                    response.Mensagem = "autor já cadastrado";
+                    response.Status = false;
+                    return response;
+                }
+
+                var autorAtualizado = await _autorRepository.AtualizarAutor(autorNome.Nome, idAutor);
+
+                if (!autorAtualizado)
+                {
+                    response.Mensagem = "erro ao inserir autor!";
+                    response.Status = false;
+                    return response;
+                }
+
+                response.Mensagem = "autor atualizado com sucesso";
+                response.Status = autorAtualizado;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
                 response.Status = false;
                 return response;
             }
-
-            var validarAutor = await _autorRepository.SelecionarAutorPorNome(autorNome.Nome);
-
-            if (validarAutor)
-            {
-                response.Mensagem = "autor já cadastrado";
-                response.Status = false;
-                return response;
-            }
-
-            var autorAtualizado = await _autorRepository.AtualizarAutor(autorNome.Nome, idAutor);
-
-            if (!autorAtualizado)
-            {
-                response.Mensagem = "erro ao inserir autor!";
-                response.Status = false;
-                return response;
-            }
-
-            response.Mensagem = "autor atualizado com sucesso";
-            response.Status = autorAtualizado;
-            return response;
         }
 
         public async Task<Response<CadastrarAutorDto>> CadastrarAutor(CadastrarAutorDto autorNome)
         {
             Response<CadastrarAutorDto> response = new Response<CadastrarAutorDto>();
 
-            if (string.IsNullOrEmpty(autorNome.Nome))
+            try
             {
-                response.Mensagem = "nome do autor nulo/vázio!";
+                if (string.IsNullOrEmpty(autorNome.Nome))
+                {
+                    response.Mensagem = "nome do autor nulo/vázio!";
+                    response.Status = false;
+                    return response;
+                }
+
+                var validarAutor = await _autorRepository.SelecionarAutorPorNome(autorNome.Nome);
+
+                if (validarAutor)
+                {
+                    response.Mensagem = "autor já cadastrado";
+                    response.Status = false;
+                    return response;
+                }
+
+                var autor = await _autorRepository.InserirAutor(autorNome.Nome);
+
+                if (!autor)
+                {
+                    response.Mensagem = "erro ao inserir autor!";
+                    response.Status = false;
+                    return response;
+                }
+
+                response.Mensagem = "autor cadastrado com sucesso";
+                response.Status = autor;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
                 response.Status = false;
                 return response;
             }
-
-            var validarAutor = await _autorRepository.SelecionarAutorPorNome(autorNome.Nome);
-
-            if (validarAutor)
-            {
-                response.Mensagem = "autor já cadastrado";
-                response.Status = false;
-                return response;
-            }
-
-            var autor = await _autorRepository.InserirAutor(autorNome.Nome);
-
-            if (!autor)
-            {
-                response.Mensagem = "erro ao inserir autor!";
-                response.Status = false;
-                return response;
-            }
-
-            response.Mensagem = "autor cadastrado com sucesso";
-            response.Status = autor;
-            return response;
         }
 
         public async Task<Response<bool>> ExcluirAutor(int idAutor)
         {
             Response<bool> response = new Response<bool>();
 
-            var autorExcluido = await _autorRepository.DeletarAutor(idAutor);
-
-            if (!autorExcluido)
+            try
             {
-                response.Mensagem = "não foi possível excluir o autor!";
+                var autorExcluido = await _autorRepository.DeletarAutor(idAutor);
+
+                if (!autorExcluido)
+                {
+                    response.Mensagem = "não foi possível excluir o autor!";
+                    response.Status = false;
+                    return response;
+                }
+
+                response.Mensagem = "autor excluído";
+                response.Status = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
                 response.Status = false;
                 return response;
             }
-
-            response.Mensagem = "autor excluído";
-            response.Status = true;
-            return response;
         }
 
         public async Task<Response<ListarAutorPorIdDto>> ObterAutorPorId(int idAutor)
         {
             Response<ListarAutorPorIdDto> response = new Response<ListarAutorPorIdDto>();
 
-            var autor = await _autorRepository.SelecionarAutorPorId(idAutor);
-
-            if (autor == null)
+            try
             {
-                response.Mensagem = "nenhum autor localizado";
+                var autor = await _autorRepository.SelecionarAutorPorId(idAutor);
+
+                if (autor == null)
+                {
+                    response.Mensagem = "nenhum autor localizado";
+                    response.Status = false;
+                    return response;
+                }
+
+                var autorMapeado = _mapper.Map<ListarAutorPorIdDto>(autor);
+                response.Dados = autorMapeado;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
                 response.Status = false;
                 return response;
             }
-
-            var autorMapeado = _mapper.Map<ListarAutorPorIdDto>(autor);
-            response.Dados = autorMapeado;
-            return response;
         }
 
         public async Task<Response<IEnumerable<ListarAutoresDto>>> ObterTodosAutores()
         {
             Response<IEnumerable<ListarAutoresDto>> response = new Response<IEnumerable<ListarAutoresDto>>();
 
-            var autores = await _autorRepository.SelecionarAutores();
-
-            if (!autores.Any())
+            try
             {
-                response.Mensagem = "nenhum autor localizado";
+                var autores = await _autorRepository.SelecionarAutores();
+
+                if (!autores.Any())
+                {
+                    response.Mensagem = "nenhum autor localizado";
+                    response.Status = false;
+                    return response;
+                }
+
+                var autoresMapeado = _mapper.Map<IEnumerable<ListarAutoresDto>>(autores);
+                response.Dados = autoresMapeado;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
                 response.Status = false;
                 return response;
             }
-
-            var autoresMapeado = _mapper.Map<IEnumerable<ListarAutoresDto>>(autores);
-            response.Dados = autoresMapeado;
-            return response;
         }
     }
 }
