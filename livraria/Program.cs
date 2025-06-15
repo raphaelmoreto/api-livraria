@@ -1,7 +1,8 @@
-using System.Runtime.Intrinsics.X86;
 using Database;
 using Service.InterfaceAutor;
 using Repository.InterfaceAutor;
+using Service.InterfaceLivro;
+using Repository.InterfaceLivro;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,8 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<IAutorService, Services.AutorService>();
 builder.Services.AddScoped<IAutorRepository, Repositorys.AutorRepository>();
+builder.Services.AddScoped<ILivroService, Services.LivroService>();
+builder.Services.AddScoped<ILivroRepository, Repositorys.LivroRepository>();
 
 var app = builder.Build();
 

@@ -53,7 +53,7 @@ namespace Repositorys
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("INSERT INTO autor (nome)");
-            sb.AppendLine("                  VALUES (@nomeAutor)");
+            sb.AppendLine("               VALUES (@nomeAutor)");
 
             var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { nomeAutor = nomeAutor.ToUpper() });
             return linhasAfetadas > 0;
