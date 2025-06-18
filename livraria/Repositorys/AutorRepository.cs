@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using Dapper;
-using Database;
+using Database.Interface;
 using Models;
 using Repository.InterfaceAutor;
 
@@ -8,9 +8,9 @@ namespace Repositorys
 {
     public class AutorRepository : IAutorRepository
     {
-        private readonly DatabaseConnection _dbConnection;
+        private readonly IDatabaseConnection _dbConnection;
 
-        public AutorRepository(DatabaseConnection dbConnection)
+        public AutorRepository(IDatabaseConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }

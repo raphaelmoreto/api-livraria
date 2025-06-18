@@ -1,5 +1,5 @@
 ﻿using Dtos.Livro;
-using Database;
+using Database.Interface;
 using Repository.InterfaceLivro;
 using System.Text;
 using Dapper;
@@ -8,8 +8,8 @@ namespace Repositorys
 {
     public class LivroRepository : ILivroRepository
     {
-        private readonly DatabaseConnection _dbConnection;
-        public LivroRepository(DatabaseConnection dbConnection)
+        private readonly IDatabaseConnection _dbConnection;
+        public LivroRepository(IDatabaseConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }

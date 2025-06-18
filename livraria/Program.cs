@@ -3,6 +3,7 @@ using Service.InterfaceAutor;
 using Repository.InterfaceAutor;
 using Service.InterfaceLivro;
 using Repository.InterfaceLivro;
+using Database.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +13,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// UMA NOVA INSTÂNCIA DE "DatabaseConnection" É CRIADA PARA CADA REQUISIÇÃO HTTP
-builder.Services.AddScoped<DatabaseConnection>();
+// UMA NOVA INSTÂNCIA DE "IDatabaseConnection" É CRIADA PARA CADA REQUISIÇÃO HTTP
+builder.Services.AddScoped<IDatabaseConnection, DatabaseConnection>();
 
 // INSERIR OS SERVIÇOS DO "AutoMapper"
 builder.Services.AddAutoMapper(typeof(Program));

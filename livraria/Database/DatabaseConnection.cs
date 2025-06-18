@@ -1,9 +1,10 @@
 ﻿using System.Data;
 using Microsoft.Data.SqlClient;
+using Database.Interface;
 
 namespace Database
 {
-    public class DatabaseConnection
+    public class DatabaseConnection : IDatabaseConnection
     {
         private readonly IConfiguration _configuration; //GUARDA A REFERÊNCIA À CONFIGURAÇÕES DO "appsettings.json"
 
