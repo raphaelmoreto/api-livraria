@@ -14,9 +14,25 @@ namespace Repositorys
             _dbConnection = dbConnection;
         }
 
-        public Task<bool> AtualizarLivro(AtualizarLivroDto atualizarLivro)
+        public async Task<bool> AtualizarLivro(AtualizarLivroDto livro, int idLivro)
         {
-            throw new NotImplementedException();
+            using var connection = _dbConnection.GetConnection();
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("UPDATE livro");
+            sb.AppendLine("SET titulo = @titulo,");
+            sb.AppendLine("      ano_publicacao = @anoPublicacao");
+            sb.AppendLine("WHERE id = @id;");
+
+            var parameters = new
+            {
+                titulo = livro.Titulo.ToUpper(),
+                anoPublicacao = livro.AnoPublicacao,
+                id = idLivro
+            };
+
+            var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), parameters);
+            return linhasAfetadas > 0;
         }
 
         public async Task<bool> InserirLivro(CadastrarLivroDto livro)
@@ -38,7 +54,17 @@ namespace Repositorys
             return linhasAfetadas > 0;
         }
 
-        public async Task<IEnumerable<ListarLivrosDto>> SelecionarTodosLivros()
+        public Task<IEnumerable<ListarLivrosPorAutor?>> SelecionarLivroPorAutor(string nomeAutor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<ListarLivroPorNome?>> SelecionarLivroPorNome(string livroNome)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<ListarLivrosDto?>> SelecionarTodosLivros()
         {
             using var connection = _dbConnection.GetConnection();
 
@@ -53,6 +79,19 @@ namespace Repositorys
 
             var livros = await connection.QueryAsync<ListarLivrosDto>(sb.ToString());
             return livros;
+        }
+
+        public async Task<bool> VerificarSeExisteLivroPorNome(string nomeLivro)
+        {
+            using var connection = _dbConnection.GetConnection();
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("SELECT COUNT(titulo)");
+            sb.AppendLine("FROM livro");
+            sb.AppendLine("WHERE titulo = @nomeLivro;");
+
+            var retorno = await connection.QueryFirstOrDefaultAsync<int?>(sb.ToString(), new { nomeLivro });
+            return retorno > 0;
         }
     }
 }

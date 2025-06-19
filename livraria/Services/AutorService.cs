@@ -114,12 +114,12 @@ namespace Services
 
                 if (!autorExcluido)
                 {
-                    response.Mensagem = "não foi possível excluir o autor!";
+                    response.Mensagem = "NÃO FOI POSSÍVEL DELETAR AUTOR!";
                     response.Status = false;
                     return response;
                 }
 
-                response.Mensagem = "autor excluído";
+                response.Mensagem = "AUTOR EXCLUÍDO";
                 response.Status = true;
                 return response;
             }
@@ -141,7 +141,7 @@ namespace Services
 
                 if (autor == null)
                 {
-                    response.Mensagem = "nenhum autor localizado";
+                    response.Mensagem = "NENHUM AUTOR LOCALIZADO!";
                     response.Status = false;
                     return response;
                 }

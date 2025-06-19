@@ -98,7 +98,7 @@ namespace Repositorys
             sb.AppendLine("WHERE nome = @autorNome");
 
             var retorno = await connection.QueryFirstOrDefaultAsync<int>(sb.ToString(), new { autorNome = autorNome.ToUpper() });
-            return retorno >= 0;
+            return retorno > 0;
         }
     }
 }
