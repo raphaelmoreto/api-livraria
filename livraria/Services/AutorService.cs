@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Dtos.Autor;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Models;
 using Repository.InterfaceAutor;
 using Service.InterfaceAutor;
@@ -68,7 +69,7 @@ namespace Services
             {
                 if (string.IsNullOrEmpty(autorNome.Nome))
                 {
-                    response.Mensagem = "nome do autor nulo/vázio!";
+                    response.Mensagem = "PREENCHIMENTO DO NOME OBRIGATÓRIO";
                     response.Status = false;
                     return response;
                 }
@@ -77,7 +78,7 @@ namespace Services
 
                 if (validarAutor)
                 {
-                    response.Mensagem = "autor já cadastrado";
+                    response.Mensagem = "AUTOR JÁ CADASTRADO";
                     response.Status = false;
                     return response;
                 }
@@ -86,12 +87,12 @@ namespace Services
 
                 if (!autor)
                 {
-                    response.Mensagem = "erro ao inserir autor!";
+                    response.Mensagem = "ERRO AO INSERIR AUTOR";
                     response.Status = false;
                     return response;
                 }
 
-                response.Mensagem = "autor cadastrado com sucesso";
+                response.Mensagem = "AUTOR CADASTRADO COM SUCESSO";
                 response.Status = autor;
                 return response;
             }
@@ -167,7 +168,7 @@ namespace Services
 
                 if (!autores.Any())
                 {
-                    response.Mensagem = "nenhum autor localizado";
+                    response.Mensagem = "NENHUM AUTOR LOCALIZADO";
                     response.Status = false;
                     return response;
                 }

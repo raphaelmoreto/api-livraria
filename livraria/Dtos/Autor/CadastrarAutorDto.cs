@@ -1,4 +1,6 @@
-﻿namespace Dtos.Autor
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Dtos.Autor
 {
     public class CadastrarAutorDto
     {

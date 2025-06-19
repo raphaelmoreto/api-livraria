@@ -14,6 +14,11 @@ namespace Repositorys
             _dbConnection = dbConnection;
         }
 
+        public Task<bool> AtualizarLivro(AtualizarLivroDto atualizarLivro)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> InserirLivro(CadastrarLivroDto livro)
         {
             using var connection = _dbConnection.GetConnection();

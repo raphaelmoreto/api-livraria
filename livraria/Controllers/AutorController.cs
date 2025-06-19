@@ -20,66 +20,66 @@ namespace Controllers
         [HttpPost]
         public async Task<IActionResult> PostAutor([FromBody] CadastrarAutorDto autorNome)
         {
-            var cadastroAutor = await _autorService.CadastrarAutor(autorNome);
+            var resultado = await _autorService.CadastrarAutor(autorNome);
 
-            if (cadastroAutor.Status == false)
+            if (!resultado.Status)
             {
-                return Conflict(cadastroAutor);
+                return Ok(resultado.Mensagem);
             }
 
-            return Ok(cadastroAutor);
+            return Ok(resultado);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetTodosAutores()
         {
-            var autores = await _autorService.ObterTodosAutores();
+            var resultado = await _autorService.ObterTodosAutores();
 
-            if (autores.Status == false)
+            if (resultado.Status == false)
             {
-                return NotFound(autores);
+                return Ok(resultado);
             }
 
-            return Ok(autores);
+            return Ok(resultado);
         }
 
         [HttpGet("{idAutor}")]
         public async Task<IActionResult> GetAutorPorId([FromRoute] int idAutor)
         {
-            var autor = await _autorService.ObterAutorPorId(idAutor);
+            var resultado = await _autorService.ObterAutorPorId(idAutor);
             
-            if (autor.Status == false)
+            if (resultado.Status == false)
             {
-                return NotFound(autor);
+                return Ok(resultado);
             }
 
-            return Ok(autor);
+            return Ok(resultado);
         }
 
         [HttpPut("{idAutor}")]
         public async Task<IActionResult> AtualizarAutor([FromBody] AtualizarAutorDto autorNome, [FromRoute] int idAutor)
         {
-            var autorAtualizado = await _autorService.AtualizarAutor(autorNome, idAutor);
+            var resultado = await _autorService.AtualizarAutor(autorNome, idAutor);
 
-            if (autorAtualizado.Status == false)
+            if (resultado.Status == false)
             {
-                return Conflict(autorAtualizado);
+                return Ok(resultado);
             }
 
-            return Ok(autorAtualizado);
+            return Ok(resultado);
         }
 
         [HttpDelete("{idAutor}")]
         public async Task<IActionResult> DeletAutor([FromRoute] int idAutor)
         {
-            var autorDeletado = await _autorService.ExcluirAutor(idAutor);
+            var resultado = await _autorService.ExcluirAutor(idAutor);
 
-            if (autorDeletado.Status == false)
+            if (resultado.Status == false)
             {
-                return Conflict(autorDeletado);
+                return Ok(resultado);
             }
 
-            return Ok(autorDeletado);
+            return Ok(resultado);
         }
     }
 }
