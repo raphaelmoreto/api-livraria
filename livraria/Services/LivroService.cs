@@ -23,7 +23,7 @@ namespace Services
                 if (string.IsNullOrEmpty(livro.Titulo))
                 {
                     response.Mensagem = "título do livro não pode ser nulo ou vázio";
-                    response.Status = false;
+                    response.Status = true;
                     return response;
                 }
 
@@ -32,12 +32,12 @@ namespace Services
                     livro.IdAutor = 1;
                 }
 
-                if (livro.AnoPublicacao.HasValue)
+                if (livro.AnoPublicacao.HasValue) //VERIFICAR UMA FORMA PARA A DATA VIR NULA
                 {
                     if (livro.AnoPublicacao > DateTime.Now)
                     {
                         response.Mensagem = "ano de publicação não pode ser maior que a data atual";
-                        response.Status = false;
+                        response.Status = true;
                         return response;
                     }
                 }
@@ -46,6 +46,33 @@ namespace Services
 
                 response.Mensagem = "livro cadastrado com sucesso";
                 response.Status = livroCadastrado;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
+                response.Status = false;
+                return response;
+            }
+        }
+
+        public async Task<Response<IEnumerable<ListarLivrosDto>>> BuscarTodosLivros()
+        {
+            Response<IEnumerable<ListarLivrosDto>> response = new Response<IEnumerable<ListarLivrosDto>>();
+
+            try
+            {
+                var listaLivros = await _livroRepository.SelecionarTodosLivros();
+
+                if (listaLivros == null)
+                {
+                    response.Mensagem = "nenhum livro encontrado!";
+                    response.Status = true;
+                    return response;
+                }
+
+                response.Dados = listaLivros;
+                response.Status = true;
                 return response;
             }
             catch (Exception ex)

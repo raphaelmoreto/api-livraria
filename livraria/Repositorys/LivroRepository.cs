@@ -32,5 +32,22 @@ namespace Repositorys
             var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), parameters);
             return linhasAfetadas > 0;
         }
+
+        public async Task<IEnumerable<ListarLivrosDto>> SelecionarTodosLivros()
+        {
+            using var connection = _dbConnection.GetConnection();
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("SELECT l.id,");
+            sb.AppendLine("           l.titulo,");
+            sb.AppendLine("           l.ano_publicacao AS anoPublicacao,");
+            sb.AppendLine("           a.nome AS autor");
+            sb.AppendLine("FROM livro l");
+            sb.AppendLine("INNER JOIN autor a ON l.fk_autor = a.id");
+            sb.AppendLine("ORDER BY l.titulo;");
+
+            var livros = await connection.QueryAsync<ListarLivrosDto>(sb.ToString());
+            return livros;
+        }
     }
 }

@@ -22,10 +22,23 @@ namespace Controllers
 
             if (cadastrarLivro.Status == false)
             {
-                return Ok(cadastrarLivro);
+                return BadRequest(cadastrarLivro);
             }
 
             return Ok(cadastrarLivro);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetTodosLivros()
+        {
+            var livros = await _livroService.BuscarTodosLivros();
+
+            if (livros.Status == false)
+            {
+                return BadRequest(livros);
+            }
+
+            return Ok(livros);
         }
     }
 }
