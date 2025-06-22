@@ -54,17 +54,29 @@ namespace Repositorys
             return linhasAfetadas > 0;
         }
 
-        public Task<IEnumerable<ListarLivrosPorAutor?>> SelecionarLivroPorAutor(string nomeAutor)
+        public Task<IEnumerable<ListarLivrosPorAutor>> SelecionarLivroPorAutor(string nomeAutor)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<ListarLivroPorNome?>> SelecionarLivroPorNome(string livroNome)
+        public async Task<ListarLivroPorNome?> SelecionarLivroPorNome(string livroNome)
         {
-            throw new NotImplementedException();
+            using var connection = _dbConnection.GetConnection();
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("SELECT l.id,");
+            sb.AppendLine("           l.titulo,");
+            sb.AppendLine("           l.ano_publicacao AS 'anoPublicacao',");
+            sb.AppendLine("           a.nome AS 'autor'");
+            sb.AppendLine("FROM livro l");
+            sb.AppendLine("INNER JOIN autor a ON l.fk_autor = a.id");
+            sb.AppendLine("WHERE l.titulo = @livroNome;");
+
+            var livro = await connection.QueryFirstOrDefaultAsync<ListarLivroPorNome>(sb.ToString(), new { livroNome });
+            return livro;
         }
 
-        public async Task<IEnumerable<ListarLivrosDto?>> SelecionarTodosLivros()
+        public async Task<IEnumerable<ListarLivrosDto>> SelecionarTodosLivros()
         {
             using var connection = _dbConnection.GetConnection();
 

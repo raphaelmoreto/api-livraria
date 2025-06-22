@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Dtos.Autor;
+using Dtos.Livro;
 using Models;
 
 namespace Profiles
@@ -8,7 +8,10 @@ namespace Profiles
     {
         public LivroMapper()
         {
-            CreateMap<Livro, CadastrarAutorDto>();
+            CreateMap<Livro, CadastrarLivroDto>();
+            CreateMap<Livro, ListarLivrosDto>();
+            CreateMap<Livro, AtualizarLivroDto>();
+            CreateMap<Livro, ListarLivroPorNome>();
         }
     }
 }

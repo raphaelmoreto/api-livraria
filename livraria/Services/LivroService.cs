@@ -86,9 +86,30 @@ namespace Services
             }
         }
 
-        public Task<Response<ListarLivroPorNome>> BuscarLivroPorNome(string livroNome)
+        public async Task<Response<ListarLivroPorNome>> BuscarLivroPorNome(string livroNome)
         {
-            throw new NotImplementedException();
+            Response<ListarLivroPorNome> response = new Response<ListarLivroPorNome>();
+
+            try
+            {
+                var livro = await _livroRepository.SelecionarLivroPorNome(livroNome);
+
+                if (livro == null)
+                {
+                    response.Mensagem = "LIVRO NÃO ENCONTRADO";
+                    return response;
+                }
+
+                var livroMapeado = _mapper.Map<ListarLivroPorNome>(livro);
+                response.Dados = livroMapeado;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
+                response.Status = false;
+                return response;
+            }
         }
 
         public Task<Response<IEnumerable<ListarLivrosPorAutor>>> BuscarLivrosPorAutor(string nomeAutor)

@@ -41,6 +41,19 @@ namespace Controllers
             return Ok(resultado);
         }
 
+        [HttpGet("buscar-por-nome")]
+        public async Task<IActionResult> GetLivroPorNome([FromQuery] string livroNome)
+        {
+            var result = await _livroService.BuscarLivroPorNome(livroNome);
+
+            if (!result.Status)
+            {
+                return Ok(result);
+            }
+
+            return Ok(result);
+        }
+
         [HttpPut("{idLivro}")]
         public async Task<IActionResult> PutLivro([FromBody] AtualizarLivroDto livro, [FromRoute] int idLivro)
         {
