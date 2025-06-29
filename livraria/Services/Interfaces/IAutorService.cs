@@ -13,6 +13,6 @@ namespace Service.InterfaceAutor
 
         Task<Response<ListarAutorPorNomeDto>> ObterAutorPorNome(string autorNome);
 
-        //Task<Response<IEnumerable<ListarAutoresDto>>> ObterTodosAutores();
+        Task<Response<IEnumerable<ListarAutoresDto>>> ObterTodosAutores();
     }
 }

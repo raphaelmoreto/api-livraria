@@ -13,7 +13,7 @@ namespace Repository.InterfaceAutor
 
         Task<IEnumerable<Autor>> SelecionarAutores();
 
-        Task<ListarAutorPorNomeDto?> SelecionarAutorPorNome(string autorNome);
+        Task<Autor?> SelecionarAutorPorNome(string autorNome);
 
         Task<bool> VerificarAutorPorNome(string autorNome);
     }

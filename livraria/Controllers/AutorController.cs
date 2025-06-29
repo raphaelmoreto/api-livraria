@@ -36,9 +36,7 @@ namespace Controllers
             var resultado = await _autorService.CadastrarAutor(autorNomeDTO);
 
             if (!resultado.StatusResponse)
-            {
                 return Conflict(new { erros = resultado.Notificacao });
-            }
 
             return Ok(new
             {
@@ -53,9 +51,7 @@ namespace Controllers
             var resultado = await _autorService.ObterAutorPorNome(autorNome);
 
             if (!resultado.StatusResponse)
-            {
                 return Conflict(new { erros = resultado.Notificacao});
-            }
 
             return Ok(new
             {
@@ -64,18 +60,20 @@ namespace Controllers
             });
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetTodosAutores()
-        //{
-        //    var resultado = await _autorService.ObterTodosAutores();
+        [HttpGet]
+        public async Task<IActionResult> GetTodosAutores()
+        {
+            var resultado = await _autorService.ObterTodosAutores();
 
-        //    if (!resultado.Status)
-        //    {
-        //        return Ok(resultado);
-        //    }
+            if (!resultado.StatusResponse)
+                return Conflict(new { erros = resultado.Notificacao});
 
-        //    return Ok(resultado);
-        //}
+            return Ok(new
+            {
+                mensagem = resultado.Notificacao,
+                dados = resultado.Dados
+            });
+        }
 
         [HttpPut("{idAutor}")]
         public async Task<IActionResult> PutAutor([FromBody] AtualizarAutorDto autorNomeDTO, [FromRoute] int idAutor)
@@ -83,9 +81,7 @@ namespace Controllers
             var resultado = await _autorService.AtualizarAutor(autorNomeDTO, idAutor);
 
             if (!resultado.StatusResponse)
-            {
                 return Conflict(new { erros = resultado.Notificacao });
-            }
 
             return Ok(new
             {

@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using Azure;
 using Dtos.Autor;
 using Repository.InterfaceAutor;
 using Service.InterfaceAutor;
@@ -107,31 +109,22 @@ namespace Services
             }
         }
 
-        //public async Task<Response<IEnumerable<ListarAutoresDto>>> ObterTodosAutores()
-        //{
-        //    Response<IEnumerable<ListarAutoresDto>> response = new Response<IEnumerable<ListarAutoresDto>>();
+        public async Task<Response<IEnumerable<ListarAutoresDto>>> ObterTodosAutores()
+        {
+            try
+            {
+                var autores = await _autorRepository.SelecionarAutores();
 
-        //    try
-        //    {
-        //        var autores = await _autorRepository.SelecionarAutores();
+                if (!autores.Any())
+                    return Response<IEnumerable<ListarAutoresDto>>.Sucesso(null, "AUTORES NÃO ENCONTRADOS");
 
-        //        if (!autores.Any())
-        //        {
-        //            response.Mensagem = "NENHUM AUTOR LOCALIZADO";
-        //            response.Status = false;
-        //            return response;
-        //        }
-
-        //        var autoresMapeado = _mapper.Map<IEnumerable<ListarAutoresDto>>(autores);
-        //        response.Dados = autoresMapeado;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Mensagem = ex.Message;
-        //        response.Status = false;
-        //        return response;
-        //    }
-        //}
+                var autoresMapeado = _mapper.Map<IEnumerable<ListarAutoresDto>>(autores);
+                return Response<IEnumerable<ListarAutoresDto>> .Sucesso(autoresMapeado, "BUSCA REALIZADA COM SUCESSO");
+            }
+            catch (Exception ex)
+            {
+                return Response<IEnumerable<ListarAutoresDto>>.Erro("ERRO INTERNO: " + ex.Message);
+            }
+        }
     }
 }
