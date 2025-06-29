@@ -9,7 +9,7 @@ namespace Service.InterfaceAutor
 
         Task<Response<CadastrarAutorDto>> CadastrarAutor(CadastrarAutorDto autorNomeDTO);
 
-        //Task<Response<bool>> ExcluirAutor(int idAutor);
+        Task<Response<bool>> ExcluirAutor(int idAutor);
 
         Task<Response<ListarAutorPorNomeDto>> ObterAutorPorNome(string autorNome);
 

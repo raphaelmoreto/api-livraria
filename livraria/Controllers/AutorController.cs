@@ -17,18 +17,21 @@ namespace Controllers
 
         //O "IActionResult" É UM TIPO GENÉRICO DE RETORNO PARA MÉTODOS DE CONTROLLERS QUE REPRESENTAM QUALQUER TIPO DE RESPOSTA HTTP
 
-        //[HttpDelete("{idAutor}")]
-        //public async Task<IActionResult> DeleteAutor([FromRoute] int idAutor)
-        //{
-        //    var resultado = await _autorService.ExcluirAutor(idAutor);
+        [HttpDelete("{idAutor}")]
+        public async Task<IActionResult> DeleteAutor([FromRoute] int idAutor)
+        {
+            var resultado = await _autorService.ExcluirAutor(idAutor);
 
-        //    if (!resultado.Status)
-        //    {
-        //        return Conflict(resultado);
-        //    }
+            if (!resultado.StatusResponse)
+            {
+                return Conflict(new { erros = resultado.Notificacao});
+            }
 
-        //    return Ok(resultado);
-        //}
+            return Ok(new
+            {
+                mensagem = resultado.Notificacao,
+            });
+        }
 
         [HttpPost]
         public async Task<IActionResult> PostAutor([FromBody] CadastrarAutorDto autorNomeDTO)

@@ -64,32 +64,21 @@ namespace Services
             }
         }
 
-        //public async Task<Response<bool>> ExcluirAutor(int idAutor)
-        //{
-        //    Response<bool> response = new Response<bool>();
+        public async Task<Response<bool>> ExcluirAutor(int idAutor)
+        {
+            try
+            {
+                var autorExcluido = await _autorRepository.DeletarAutor(idAutor);
+                if (!autorExcluido)
+                    return Response<bool>.Erro("ERRO AO EXCLUIR AUTOR");
 
-        //    try
-        //    {
-        //        var autorExcluido = await _autorRepository.DeletarAutor(idAutor);
-
-        //        if (!autorExcluido)
-        //        {
-        //            response.Mensagem = "NÃO FOI POSSÍVEL DELETAR AUTOR";
-        //            response.Status = false;
-        //            return response;
-        //        }
-
-        //        response.Mensagem = "AUTOR EXCLUÍDO";
-        //        response.Status = true;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Mensagem = ex.Message;
-        //        response.Status = false;
-        //        return response;
-        //    }
-        //}
+                return Response<bool>.Sucesso(true, "AUTOR EXCLUIDO COM SUCESSO");
+            }
+            catch (Exception ex)
+            {
+                return Response<bool>.Erro("ERRO INTERNO: " + ex.Message);
+            }
+        }
 
         public async Task<Response<ListarAutorPorNomeDto>> ObterAutorPorNome(string autorNome)
         {

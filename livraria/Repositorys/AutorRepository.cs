@@ -83,7 +83,7 @@ namespace Repositorys
             sb.AppendLine("FROM autor");
             sb.AppendLine("WHERE nome = @autorNome");
 
-            var autor = await connection.QueryFirstOrDefaultAsync<ListarAutorPorNomeDto>(sb.ToString(), new { autorNome });
+            var autor = await connection.QueryFirstOrDefaultAsync<Autor>(sb.ToString(), new { autorNome });
             return autor;
         }
 
