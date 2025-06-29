@@ -9,7 +9,7 @@ namespace Profiles
         public AutorMapper()
         {
             CreateMap<Autor, ListarAutoresDto>();
-            CreateMap<Autor, ListarAutorPorIdDto>();
+            CreateMap<Autor, ListarAutorPorNomeDto>();
         }
     }
 }

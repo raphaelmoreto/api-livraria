@@ -8,9 +8,7 @@
 
         public bool StatusResponse { get; private set; } = false;
 
-        public bool TemNotificacao() => Notificacao.Any();
-
-        public static Response<T> Sucesso(T dados, string? notificacao = null)
+        public static Response<T> Sucesso(T? dados, string? notificacao = null)
         {
             var response = new Response<T>
             {

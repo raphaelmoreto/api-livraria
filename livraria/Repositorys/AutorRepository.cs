@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Dapper;
 using Database.Interface;
+using Dtos.Autor;
 using Models;
 using Repository.InterfaceAutor;
 
@@ -73,18 +74,17 @@ namespace Repositorys
             return autores;
         }
 
-        public async Task<Autor?> SelecionarAutorPorId(int idAutor)
+        public async Task<ListarAutorPorNomeDto?> SelecionarAutorPorNome(string autorNome)
         {
             using var connection = _dbConnection.GetConnection();
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("SELECT id,");
-            sb.AppendLine("           nome,");
+            sb.AppendLine("SELECT nome,");
             sb.AppendLine("           status_autor AS statusAutor");
             sb.AppendLine("FROM autor");
-            sb.AppendLine("WHERE id = @idAutor");
+            sb.AppendLine("WHERE nome = @autorNome");
 
-            var autor = await connection.QueryFirstOrDefaultAsync<Autor>(sb.ToString(), new { idAutor });
+            var autor = await connection.QueryFirstOrDefaultAsync<ListarAutorPorNomeDto>(sb.ToString(), new { autorNome });
             return autor;
         }
 

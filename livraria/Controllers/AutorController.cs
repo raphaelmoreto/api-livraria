@@ -17,6 +17,19 @@ namespace Controllers
 
         //O "IActionResult" É UM TIPO GENÉRICO DE RETORNO PARA MÉTODOS DE CONTROLLERS QUE REPRESENTAM QUALQUER TIPO DE RESPOSTA HTTP
 
+        //[HttpDelete("{idAutor}")]
+        //public async Task<IActionResult> DeleteAutor([FromRoute] int idAutor)
+        //{
+        //    var resultado = await _autorService.ExcluirAutor(idAutor);
+
+        //    if (!resultado.Status)
+        //    {
+        //        return Conflict(resultado);
+        //    }
+
+        //    return Ok(resultado);
+        //}
+
         [HttpPost]
         public async Task<IActionResult> PostAutor([FromBody] CadastrarAutorDto autorNomeDTO)
         {
@@ -34,23 +47,27 @@ namespace Controllers
             });
         }
 
+        [HttpGet("por-nome")]
+        public async Task<IActionResult> GetAutorPorNome([FromQuery] string autorNome)
+        {
+            var resultado = await _autorService.ObterAutorPorNome(autorNome);
+
+            if (!resultado.StatusResponse)
+            {
+                return Conflict(new { erros = resultado.Notificacao});
+            }
+
+            return Ok(new
+            {
+                mensage = resultado.Notificacao,
+                dados = resultado.Dados
+            });
+        }
+
         //[HttpGet]
         //public async Task<IActionResult> GetTodosAutores()
         //{
         //    var resultado = await _autorService.ObterTodosAutores();
-
-        //    if (!resultado.Status)
-        //    {
-        //        return Ok(resultado);
-        //    }
-
-        //    return Ok(resultado);
-        //}
-
-        //[HttpGet("{idAutor}")]
-        //public async Task<IActionResult> GetAutorPorId([FromRoute] int idAutor)
-        //{
-        //    var resultado = await _autorService.ObterAutorPorId(idAutor);
 
         //    if (!resultado.Status)
         //    {
@@ -76,18 +93,5 @@ namespace Controllers
                 dados = resultado.Dados
             });
         }
-
-        //[HttpDelete("{idAutor}")]
-        //public async Task<IActionResult> DeleteAutor([FromRoute] int idAutor)
-        //{
-        //    var resultado = await _autorService.ExcluirAutor(idAutor);
-
-        //    if (!resultado.Status)
-        //    {
-        //        return Conflict(resultado);
-        //    }
-
-        //    return Ok(resultado);
-        //}
     }
 }

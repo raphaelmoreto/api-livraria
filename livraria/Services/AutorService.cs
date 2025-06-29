@@ -62,49 +62,6 @@ namespace Services
             }
         }
 
-        //public async Task<Response<CadastrarAutorDto>> CadastrarAutor(CadastrarAutorDto autorNome)
-        //{
-        //    Response<CadastrarAutorDto> response = new Response<CadastrarAutorDto>();
-
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(autorNome.Nome))
-        //        {
-        //            response.Mensagem = "PREENCHIMENTO DO NOME OBRIGATÓRIO";
-        //            response.Status = false;
-        //            return response;
-        //        }
-
-        //        var validarAutor = await _autorRepository.VerificarAutorPorNome(autorNome.Nome);
-
-        //        if (validarAutor)
-        //        {
-        //            response.Mensagem = "AUTOR JÁ CADASTRADO";
-        //            response.Status = false;
-        //            return response;
-        //        }
-
-        //        var autor = await _autorRepository.InserirAutor(autorNome.Nome);
-
-        //        if (!autor)
-        //        {
-        //            response.Mensagem = "ERRO AO INSERIR AUTOR";
-        //            response.Status = false;
-        //            return response;
-        //        }
-
-        //        response.Mensagem = "AUTOR CADASTRADO COM SUCESSO";
-        //        response.Status = autor;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Mensagem = ex.Message;
-        //        response.Status = false;
-        //        return response;
-        //    }
-        //}
-
         //public async Task<Response<bool>> ExcluirAutor(int idAutor)
         //{
         //    Response<bool> response = new Response<bool>();
@@ -132,32 +89,23 @@ namespace Services
         //    }
         //}
 
-        //public async Task<Response<ListarAutorPorIdDto>> ObterAutorPorId(int idAutor)
-        //{
-        //    Response<ListarAutorPorIdDto> response = new Response<ListarAutorPorIdDto>();
+        public async Task<Response<ListarAutorPorNomeDto>> ObterAutorPorNome(string autorNome)
+        {
+            try
+            {
+                var autor = await _autorRepository.SelecionarAutorPorNome(autorNome);
 
-        //    try
-        //    {
-        //        var autor = await _autorRepository.SelecionarAutorPorId(idAutor);
+                if (autor == null)
+                    return Response<ListarAutorPorNomeDto>.Sucesso(null, "AUTOR NÃO ENCONTRADO!");
 
-        //        if (autor == null)
-        //        {
-        //            response.Mensagem = "NENHUM AUTOR LOCALIZADO!";
-        //            response.Status = false;
-        //            return response;
-        //        }
-
-        //        var autorMapeado = _mapper.Map<ListarAutorPorIdDto>(autor);
-        //        response.Dados = autorMapeado;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Mensagem = ex.Message;
-        //        response.Status = false;
-        //        return response;
-        //    }
-        //}
+                var autorMapeado = _mapper.Map<ListarAutorPorNomeDto>(autor);
+                return Response<ListarAutorPorNomeDto>.Sucesso(autorMapeado, "BUSCA REALIZADA COM SUCESSO");
+            }
+            catch (Exception ex)
+            {
+                return Response<ListarAutorPorNomeDto>.Erro("ERRO INTERNO: " + ex.Message);
+            }
+        }
 
         //public async Task<Response<IEnumerable<ListarAutoresDto>>> ObterTodosAutores()
         //{

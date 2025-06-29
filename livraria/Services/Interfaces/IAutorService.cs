@@ -11,7 +11,7 @@ namespace Service.InterfaceAutor
 
         //Task<Response<bool>> ExcluirAutor(int idAutor);
 
-        //Task<Response<ListarAutorPorIdDto>> ObterAutorPorId(int idAutor);
+        Task<Response<ListarAutorPorNomeDto>> ObterAutorPorNome(string autorNome);
 
         //Task<Response<IEnumerable<ListarAutoresDto>>> ObterTodosAutores();
     }
