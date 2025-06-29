@@ -88,16 +88,16 @@ namespace Repositorys
             return autor;
         }
 
-        public async Task<bool> SelecionarAutorPorNome(string autorNome)
+        public async Task<bool> VerificarAutorPorNome(string autorNome)
         {
             using var connection = _dbConnection.GetConnection();
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("SELECT COUNT(nome)");
+            sb.AppendLine("SELECT COUNT(*)");
             sb.AppendLine("FROM autor");
-            sb.AppendLine("WHERE nome = @autorNome");
+            sb.AppendLine("WHERE UPPER(nome) = @autorNome");
 
-            var retorno = await connection.QueryFirstOrDefaultAsync<int>(sb.ToString(), new { autorNome = autorNome.ToUpper() });
+            var retorno = await connection.ExecuteScalarAsync<int>(sb.ToString(), new { autorNome = autorNome.ToUpper() });
             return retorno > 0;
         }
     }

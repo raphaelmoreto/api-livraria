@@ -8,8 +8,6 @@ namespace Profiles
     {
         public AutorMapper()
         {
-            CreateMap<Autor, AtualizarAutorDto>();
-            CreateMap<Autor, CadastrarAutorDto>();
             CreateMap<Autor, ListarAutoresDto>();
             CreateMap<Autor, ListarAutorPorIdDto>();
         }

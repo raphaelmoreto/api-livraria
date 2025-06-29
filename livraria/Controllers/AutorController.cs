@@ -18,68 +18,72 @@ namespace Controllers
         //O "IActionResult" É UM TIPO GENÉRICO DE RETORNO PARA MÉTODOS DE CONTROLLERS QUE REPRESENTAM QUALQUER TIPO DE RESPOSTA HTTP
 
         [HttpPost]
-        public async Task<IActionResult> PostAutor([FromBody] CadastrarAutorDto autorNome)
+        public async Task<IActionResult> PostAutor([FromBody] CadastrarAutorDto autorNomeDTO)
         {
-            var resultado = await _autorService.CadastrarAutor(autorNome);
+            var resultado = await _autorService.CadastrarAutor(autorNomeDTO);
 
-            if (!resultado.Status)
+            if (!resultado.StatusResponse)
             {
-                return Ok(resultado.Mensagem);
+                return Conflict(new { erros = resultado.Notificacao });
             }
 
-            return Ok(resultado);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetTodosAutores()
-        {
-            var resultado = await _autorService.ObterTodosAutores();
-
-            if (resultado.Status == false)
+            return Ok(new
             {
-                return Ok(resultado);
-            }
-
-            return Ok(resultado);
+                mensagem = resultado.Notificacao.FirstOrDefault(),
+                dados = resultado.Dados
+            });
         }
 
-        [HttpGet("{idAutor}")]
-        public async Task<IActionResult> GetAutorPorId([FromRoute] int idAutor)
-        {
-            var resultado = await _autorService.ObterAutorPorId(idAutor);
+        //[HttpGet]
+        //public async Task<IActionResult> GetTodosAutores()
+        //{
+        //    var resultado = await _autorService.ObterTodosAutores();
+
+        //    if (!resultado.Status)
+        //    {
+        //        return Ok(resultado);
+        //    }
+
+        //    return Ok(resultado);
+        //}
+
+        //[HttpGet("{idAutor}")]
+        //public async Task<IActionResult> GetAutorPorId([FromRoute] int idAutor)
+        //{
+        //    var resultado = await _autorService.ObterAutorPorId(idAutor);
             
-            if (resultado.Status == false)
-            {
-                return Ok(resultado);
-            }
+        //    if (!resultado.Status)
+        //    {
+        //        return Ok(resultado);
+        //    }
 
-            return Ok(resultado);
-        }
+        //    return Ok(resultado);
+        //}
 
-        [HttpPut("{idAutor}")]
-        public async Task<IActionResult> AtualizarAutor([FromBody] AtualizarAutorDto autorNome, [FromRoute] int idAutor)
-        {
-            var resultado = await _autorService.AtualizarAutor(autorNome, idAutor);
+        //[HttpPut("{idAutor}")]
+        //public async Task<IActionResult> AtualizarAutor([FromBody] AtualizarAutorDto autorNome, [FromRoute] int idAutor)
+        //{
+        //    var resultado = await _autorService.AtualizarAutor(autorNome, idAutor);
 
-            if (resultado.Status == false)
-            {
-                return Ok(resultado);
-            }
+        //    if (!resultado.Status)
+        //    {
+        //        return Conflict(resultado);
+        //    }
 
-            return Ok(resultado);
-        }
+        //    return Ok(resultado);
+        //}
 
-        [HttpDelete("{idAutor}")]
-        public async Task<IActionResult> DeletAutor([FromRoute] int idAutor)
-        {
-            var resultado = await _autorService.ExcluirAutor(idAutor);
+        //[HttpDelete("{idAutor}")]
+        //public async Task<IActionResult> DeleteAutor([FromRoute] int idAutor)
+        //{
+        //    var resultado = await _autorService.ExcluirAutor(idAutor);
 
-            if (resultado.Status == false)
-            {
-                return Ok(resultado);
-            }
+        //    if (!resultado.Status)
+        //    {
+        //        return Conflict(resultado);
+        //    }
 
-            return Ok(resultado);
-        }
+        //    return Ok(resultado);
+        //}
     }
 }
