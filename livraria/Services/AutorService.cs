@@ -16,67 +16,45 @@ namespace Services
             _mapper = mapper;
         }
 
-        //public async Task<Response<AtualizarAutorDto>> AtualizarAutor(AtualizarAutorDto autorNome, int idAutor)
-        //{
-        //    Response<AtualizarAutorDto> response = new Response<AtualizarAutorDto>();
-
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(autorNome.Nome))
-        //        {
-        //            response.Mensagem = "NOME DO AUTOR NÃO PODE SER NULO/VÁZIO";
-        //            response.Status = false;
-        //            return response;
-        //        }
-
-        //        var validarAutor = await _autorRepository.VerificarAutorPorNome(autorNome.Nome);
-
-        //        if (validarAutor)
-        //        {
-        //            response.Mensagem = "AUTOR JÁ CADASTRADO";
-        //            response.Status = false;
-        //            return response;
-        //        }
-
-        //        var autorAtualizado = await _autorRepository.AtualizarAutor(autorNome.Nome, idAutor);
-
-        //        if (!autorAtualizado)
-        //        {
-        //            response.Mensagem = "ERRO AO ATUALIZAR AUTOR";
-        //            response.Status = false;
-        //            return response;
-        //        }
-
-        //        response.Mensagem = "AUTOR ATUALIZADO COM SUCESSO";
-        //        response.Status = autorAtualizado;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Mensagem = ex.Message;
-        //        response.Status = false;
-        //        return response;
-        //    }
-        //}
-
-        public async Task<Response<CadastrarAutorDto>> CadastrarAutor(CadastrarAutorDto autorNome)
+        public async Task<Response<AtualizarAutorDto>> AtualizarAutor(AtualizarAutorDto autorNomeDTO, int idAutor)
         {
-            Response<CadastrarAutorDto> response = new Response<CadastrarAutorDto>();
-             
             try
             {
-                if (string.IsNullOrWhiteSpace(autorNome.Nome))
+                if (string.IsNullOrWhiteSpace(autorNomeDTO.Nome))
+                    return Response<AtualizarAutorDto>.Erro("NOME DO AUTOR NÃO PODE SER NULO");
+
+                var validarAutor = await _autorRepository.VerificarAutorPorNome(autorNomeDTO.Nome);
+                if (validarAutor)
+                    return Response<AtualizarAutorDto>.Erro("AUTOR JÁ CADASTRADO");
+
+                var autorAtualizado = await _autorRepository.AtualizarAutor(autorNomeDTO.Nome, idAutor);
+                if (!autorAtualizado)
+                    return Response<AtualizarAutorDto>.Erro("ERRO AO ATUALIZAR AUTOR");
+
+                return Response<AtualizarAutorDto>.Sucesso(autorNomeDTO, "AUTOR ATUALIZADO COM SUCESSO");
+            }
+            catch (Exception ex)
+            {
+                return Response<AtualizarAutorDto>.Erro($"ERRO INTERNO: " + ex.Message);
+            }
+        }
+
+        public async Task<Response<CadastrarAutorDto>> CadastrarAutor(CadastrarAutorDto autorNomeDTO)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(autorNomeDTO.Nome))
                     return Response<CadastrarAutorDto>.Erro("NOME DO AUTOR NÃO PODE SER NULO");
 
-                var validarAutor = await _autorRepository.VerificarAutorPorNome(autorNome.Nome);
+                var validarAutor = await _autorRepository.VerificarAutorPorNome(autorNomeDTO.Nome);
                 if (validarAutor)
                     return Response<CadastrarAutorDto>.Erro("AUTOR JÁ CADASTRADO");
 
-                var autor = await _autorRepository.InserirAutor(autorNome.Nome);
+                var autor = await _autorRepository.InserirAutor(autorNomeDTO.Nome);
                 if (!autor)
                     return Response<CadastrarAutorDto>.Erro("ERRO AO INSERIR AUTOR");
 
-                return Response<CadastrarAutorDto>.Sucesso(autorNome, "AUTOR CADASTRADO COM SUCESSO");
+                return Response<CadastrarAutorDto>.Sucesso(autorNomeDTO, "AUTOR CADASTRADO COM SUCESSO");
             }
             catch (Exception ex)
             {

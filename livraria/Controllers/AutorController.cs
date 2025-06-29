@@ -29,7 +29,7 @@ namespace Controllers
 
             return Ok(new
             {
-                mensagem = resultado.Notificacao.FirstOrDefault(),
+                mensagem = resultado.Notificacao,
                 dados = resultado.Dados
             });
         }
@@ -51,7 +51,7 @@ namespace Controllers
         //public async Task<IActionResult> GetAutorPorId([FromRoute] int idAutor)
         //{
         //    var resultado = await _autorService.ObterAutorPorId(idAutor);
-            
+
         //    if (!resultado.Status)
         //    {
         //        return Ok(resultado);
@@ -60,18 +60,22 @@ namespace Controllers
         //    return Ok(resultado);
         //}
 
-        //[HttpPut("{idAutor}")]
-        //public async Task<IActionResult> AtualizarAutor([FromBody] AtualizarAutorDto autorNome, [FromRoute] int idAutor)
-        //{
-        //    var resultado = await _autorService.AtualizarAutor(autorNome, idAutor);
+        [HttpPut("{idAutor}")]
+        public async Task<IActionResult> PutAutor([FromBody] AtualizarAutorDto autorNomeDTO, [FromRoute] int idAutor)
+        {
+            var resultado = await _autorService.AtualizarAutor(autorNomeDTO, idAutor);
 
-        //    if (!resultado.Status)
-        //    {
-        //        return Conflict(resultado);
-        //    }
+            if (!resultado.StatusResponse)
+            {
+                return Conflict(new { erros = resultado.Notificacao });
+            }
 
-        //    return Ok(resultado);
-        //}
+            return Ok(new
+            {
+                mensagem = resultado.Notificacao,
+                dados = resultado.Dados
+            });
+        }
 
         //[HttpDelete("{idAutor}")]
         //public async Task<IActionResult> DeleteAutor([FromRoute] int idAutor)
