@@ -26,9 +26,9 @@ namespace Services
                 if (validarAutor)
                     return response.Erro("AUTOR JÁ CADASTRADO");
 
-                Autor autor = new Autor(autorNomeDTO.Nome);
+                Autor autor = new Autor(autorNomeDTO.Nome, idAutor);
 
-                var autorAtualizado = await _autorRepository.AtualizarAutor(autor, idAutor);
+                var autorAtualizado = await _autorRepository.AtualizarAutor(autor);
                 if (!autorAtualizado)
                     return response.Erro("ERRO AO ATUALIZAR AUTOR");
 

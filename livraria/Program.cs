@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IDatabaseConnection, DatabaseConnection>();
 
 // INSERIR OS SERVIÇOS DO "AutoMapper"
-builder.Services.AddAutoMapper(typeof(Program));
+//builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<IAutorService, Services.AutorService>();
 builder.Services.AddScoped<IAutorRepository, Repositorys.AutorRepository>();

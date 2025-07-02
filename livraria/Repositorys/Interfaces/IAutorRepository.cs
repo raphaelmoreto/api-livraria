@@ -5,7 +5,7 @@ namespace Repository.InterfaceAutor
 {
     public interface IAutorRepository
     {
-        Task<bool> AtualizarAutor(Autor autor, int idAutor);
+        Task<bool> AtualizarAutor(Autor autor);
 
         Task<bool> DeletarAutor(int idAutor);
 

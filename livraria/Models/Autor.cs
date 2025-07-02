@@ -8,13 +8,13 @@
 
         public bool StatusAutor { get; set; }
 
-        public Autor()
-        {         
-        }
-
-        public Autor(string nome)
+        public Autor(string nome, int? id = null)
         {
             Nome = nome;
+            if (id.HasValue)
+            {
+                Id = id.Value;
+            }
         }
     }
 }

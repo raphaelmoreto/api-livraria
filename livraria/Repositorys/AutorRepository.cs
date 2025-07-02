@@ -16,7 +16,7 @@ namespace Repositorys
             _dbConnection = dbConnection;
         }
 
-        public async Task<bool> AtualizarAutor(Autor autor, int idAutor)
+        public async Task<bool> AtualizarAutor(Autor autor)
         { 
             using var connection = _dbConnection.GetConnection();
 
@@ -27,7 +27,7 @@ namespace Repositorys
 
             var parameters = new
             {
-                idAutor,
+                idAutor = autor.Id,
                 autorNome = autor.Nome.ToUpper()
             };
 
