@@ -13,8 +13,8 @@ CREATE TABLE autor (
 CREATE TABLE livro (
 	id INT IDENTITY PRIMARY KEY,
 	titulo VARCHAR(100) NOT NULL,
-	ano_publicacao DATE NOT NULL,
-	fk_autor INT NOT NULL
+	ano_publicacao DATE,
+	fk_autor INT
 )
 
 ALTER TABLE livro
@@ -22,8 +22,7 @@ ADD CONSTRAINT fk_livro_autor
 FOREIGN KEY (fk_autor) REFERENCES autor (id)
 
 INSERT INTO autor (nome)
-		   VALUES ('ANÔNIMO'),
-				  ('WILLIAM SHAKESPEARE'),
+		   VALUES ('WILLIAM SHAKESPEARE'),
 				  ('JANE AUSTEN'),
 				  ('GABRIEL GARCÍA MÁRQUEZ'),
 				  ('FRANZ KAFKA'),
@@ -40,31 +39,31 @@ INSERT INTO autor (nome)
 				  ('HARUKI MURAKAMI');
 
 INSERT INTO livro (titulo, ano_publicacao, fk_autor)
-		   VALUES ('HAMLET', '1603-01-01', 2),
-				  ('MACBETH', '1606-01-01', 2),
-				  ('ROMEU E JULIETA', '1597-01-01', 2),
-				  ('ORGULHO E PRECONCEITO', '1813-01-01', 3),
-				  ('RAZÃO E SENSIBILIDADE', '1811-01-01', 3),
-				  ('CEM ANOS DE SOLIDÃO', '1967-05-30', 4),
-				  ('O AMOR NOS TEMPOS DO CÓLERA', '1985-01-01', 4),
-				  ('A METAMORFOSE', '1915-10-01', 5),
-				  ('MRS. DALLOWAY', '1925-05-14', 6),
-				  ('AO FAROL', '1927-05-05', 6),
-				  ('DOM CASMURRO', '1899-01-01', 7),
-				  ('MEMÓRIAS PÓSTUMAS DE BRÁS CUBAS', '1881-01-01', 7),
-				  ('1984', '1949-06-08', 8),
-				  ('A REVOLUÇÃO DOS BICHOS', '1945-08-17', 8),
-				  ('A PAIXÃO SEGUNDO G.H.', '1964-01-01', 9),
-				  ('O VELHO E O MAR', '1952-09-01', 10),
-				  ('ADEUS ÀS ARMAS', '1929-01-01', 10),
-				  ('CRIME E CASTIGO', '1866-01-01', 11),
-				  ('OS IRMÃOS KARAMÁZOV', '1880-01-01', 11),
-				  ('HARRY POTTER E A PEDRA FILOSOFAL', '1997-06-26', 12),
-				  ('HARRY POTTER E A CÂMARA SECRETA', '1998-07-02', 12),
-				  ('HARRY POTTER E O PRISIONEIRO DE AZKABAN', '1999-07-08', 12),
-				  ('HARRY POTTER E O CÁLICE DE FOGO', '2000-07-08', 12),
-				  ('HARRY POTTER E A ORDEM DA FÊNIX', '2003-06-21', 12),
-				  ('O ESTRANGEIRO', '1942-01-01', 13),
-				  ('ENSAIO SOBRE A CEGUEIRA', '1995-01-01', 14),
-				  ('GUERRA E PAZ', '1869-01-01', 15),
-				  ('ANNA KARIÊNINA', '1877-01-01', 15);
+		   VALUES ('HAMLET', '1603-01-01', 1),
+				  ('MACBETH', '1606-01-01', 1),
+				  ('ROMEU E JULIETA', '1597-01-01', 1),
+				  ('ORGULHO E PRECONCEITO', '1813-01-01', 2),
+				  ('RAZÃO E SENSIBILIDADE', '1811-01-01', 2),
+				  ('CEM ANOS DE SOLIDÃO', '1967-05-30', 3),
+				  ('O AMOR NOS TEMPOS DO CÓLERA', '1985-01-01', 3),
+				  ('A METAMORFOSE', '1915-10-01', 4),
+				  ('MRS. DALLOWAY', '1925-05-14', 5),
+				  ('AO FAROL', '1927-05-05', 5),
+				  ('DOM CASMURRO', '1899-01-01', 6),
+				  ('MEMÓRIAS PÓSTUMAS DE BRÁS CUBAS', '1881-01-01', 6),
+				  ('1984', '1949-06-08', 7),
+				  ('A REVOLUÇÃO DOS BICHOS', '1945-08-17', 7),
+				  ('A PAIXÃO SEGUNDO G.H.', '1964-01-01', 8),
+				  ('O VELHO E O MAR', '1952-09-01', 9),
+				  ('ADEUS ÀS ARMAS', '1929-01-01', 9),
+				  ('CRIME E CASTIGO', '1866-01-01', 10),
+				  ('OS IRMÃOS KARAMÁZOV', '1880-01-01', 10),
+				  ('HARRY POTTER E A PEDRA FILOSOFAL', '1997-06-26', 11),
+				  ('HARRY POTTER E A CÂMARA SECRETA', '1998-07-02', 11),
+				  ('HARRY POTTER E O PRISIONEIRO DE AZKABAN', '1999-07-08', 11),
+				  ('HARRY POTTER E O CÁLICE DE FOGO', '2000-07-08', 11),
+				  ('HARRY POTTER E A ORDEM DA FÊNIX', '2003-06-21', 11),
+				  ('O ESTRANGEIRO', '1942-01-01', 12),
+				  ('ENSAIO SOBRE A CEGUEIRA', '1995-01-01', 13),
+				  ('GUERRA E PAZ', '1869-01-01', 14),
+				  ('ANNA KARIÊNINA', '1877-01-01', 14);

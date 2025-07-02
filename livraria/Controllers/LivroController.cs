@@ -20,7 +20,7 @@
 //        {
 //            var resultado = await _livroService.CadastrarLivro(livro);
 
-//            if (!resultado.Status)
+//            if (!resultado.StatusResponse)
 //            {
 //                return Ok(resultado);
 //            }
@@ -65,6 +65,6 @@
 //            }
 
 //            return Ok(resultado);
-//        } 
+//        }
 //    }
 //}

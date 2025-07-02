@@ -8,7 +8,7 @@
 
         public bool StatusResponse { get; private set; } = false;
 
-        public static Response<T> Sucesso(T? dados, string? notificacao = null)
+        public Response<T> Sucesso(T? dados, string? notificacao = null)
         {
             var response = new Response<T>
             {
@@ -22,7 +22,7 @@
             return response;
         }
 
-        public static Response<T> Erro(params string[] notificacao)
+        public Response<T> Erro(params string[] notificacao)
         {
             var response = new Response<T>();
             response.Notificacao.AddRange(notificacao);

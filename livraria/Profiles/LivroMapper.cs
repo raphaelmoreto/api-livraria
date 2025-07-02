@@ -8,9 +8,7 @@ namespace Profiles
     {
         public LivroMapper()
         {
-            CreateMap<Livro, CadastrarLivroDto>();
             CreateMap<Livro, ListarLivrosDto>();
-            CreateMap<Livro, AtualizarLivroDto>();
             CreateMap<Livro, ListarLivroPorNome>();
         }
     }

@@ -16,7 +16,7 @@ namespace Repositorys
             _dbConnection = dbConnection;
         }
 
-        public async Task<bool> AtualizarAutor(string autorNome, int idAutor)
+        public async Task<bool> AtualizarAutor(AtualizarAutorDto autorNomeDto, int idAutor)
         { 
             using var connection = _dbConnection.GetConnection();
 
@@ -28,7 +28,7 @@ namespace Repositorys
             var parameters = new
             {
                 idAutor,
-                autorNome = autorNome.ToUpper()
+                autorNome = autorNomeDto.Nome.ToUpper()
             };
 
             var autorAtualizado = await connection.ExecuteAsync(sb.ToString(), parameters);
@@ -48,7 +48,7 @@ namespace Repositorys
             return linhasAfetadas > 0;
         }
 
-        public async Task<bool> InserirAutor(string nomeAutor)
+        public async Task<bool> InserirAutor(CadastrarAutorDto nomeAutor)
         {
             using var connection = _dbConnection.GetConnection();
 
@@ -56,7 +56,7 @@ namespace Repositorys
             sb.AppendLine("INSERT INTO autor (nome)");
             sb.AppendLine("               VALUES (@nomeAutor)");
 
-            var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { nomeAutor = nomeAutor.ToUpper() });
+            var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { nomeAutor = nomeAutor.Nome.ToUpper() });
             return linhasAfetadas > 0;
         }
 
