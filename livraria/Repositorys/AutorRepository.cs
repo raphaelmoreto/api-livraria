@@ -16,7 +16,7 @@ namespace Repositorys
             _dbConnection = dbConnection;
         }
 
-        public async Task<bool> AtualizarAutor(AtualizarAutorDto autorNomeDto, int idAutor)
+        public async Task<bool> AtualizarAutor(Autor autor, int idAutor)
         { 
             using var connection = _dbConnection.GetConnection();
 
@@ -28,7 +28,7 @@ namespace Repositorys
             var parameters = new
             {
                 idAutor,
-                autorNome = autorNomeDto.Nome.ToUpper()
+                autorNome = autor.Nome.ToUpper()
             };
 
             var autorAtualizado = await connection.ExecuteAsync(sb.ToString(), parameters);
@@ -48,42 +48,48 @@ namespace Repositorys
             return linhasAfetadas > 0;
         }
 
-        public async Task<bool> InserirAutor(CadastrarAutorDto nomeAutor)
+        public async Task<bool> InserirAutor(Autor autor)
         {
             using var connection = _dbConnection.GetConnection();
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("INSERT INTO autor (nome)");
-            sb.AppendLine("               VALUES (@nomeAutor)");
+            sb.AppendLine("               VALUES (@autor)");
 
-            var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { nomeAutor = nomeAutor.Nome.ToUpper() });
+            var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), new { autor = autor.Nome.ToUpper() });
             return linhasAfetadas > 0;
         }
 
-        public async Task<IEnumerable<Autor>> SelecionarAutores()
+        public async Task<IEnumerable<ListarAutoresDto>> SelecionarAutores()
         {
             using var connection = _dbConnection.GetConnection();
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("SELECT nome,");
-            sb.AppendLine("           status_autor AS 'statusAutor'");
+            sb.AppendLine("           CASE status_autor");
+            sb.AppendLine("                   WHEN 1 THEN 'ATIVO'");
+            sb.AppendLine("                   WHEN 0 THEN 'INATIVO'");
+            sb.AppendLine("           END AS 'statusAutor'");
             sb.AppendLine("FROM autor");
 
-            var autores = await connection.QueryAsync<Autor>(sb.ToString());
+            var autores = await connection.QueryAsync<ListarAutoresDto>(sb.ToString());
             return autores;
         }
 
-        public async Task<Autor?> SelecionarAutorPorNome(string autorNome)
+        public async Task<ListarAutorPorNomeDto?> SelecionarAutorPorNome(string autorNome)
         {
             using var connection = _dbConnection.GetConnection();
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("SELECT nome,");
-            sb.AppendLine("           status_autor AS statusAutor");
+            sb.AppendLine("           CASE status_autor");
+            sb.AppendLine("                   WHEN 1 THEN 'ATIVO'");
+            sb.AppendLine("                   WHEN 0 THEN 'INATIVO'");
+            sb.AppendLine("           END AS 'statusAutor'");
             sb.AppendLine("FROM autor");
             sb.AppendLine("WHERE nome = @autorNome");
 
-            var autor = await connection.QueryFirstOrDefaultAsync<Autor>(sb.ToString(), new { autorNome });
+            var autor = await connection.QueryFirstOrDefaultAsync<ListarAutorPorNomeDto>(sb.ToString(), new { autorNome });
             return autor;
         }
 

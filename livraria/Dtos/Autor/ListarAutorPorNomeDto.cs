@@ -4,6 +4,6 @@
     {
         public string Nome { get; set; } = string.Empty;
 
-        public bool StatusAutor { get; set; }
+        public string StatusAutor { get; set; } = string.Empty;
     }
 }

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Models;
+﻿using Models;
 using Dtos.Autor;
 using Repository.InterfaceAutor;
 using Service.InterfaceAutor;
@@ -9,12 +8,10 @@ namespace Services
     public class AutorService : IAutorService
     {
         private IAutorRepository _autorRepository;
-        private readonly IMapper _mapper;
 
-        public AutorService(IAutorRepository autorRepository, IMapper mapper)
+        public AutorService(IAutorRepository autorRepository)
         {
             _autorRepository = autorRepository;
-            _mapper = mapper;
         }
 
         public async Task<Response<AtualizarAutorDto>> AtualizarAutor(AtualizarAutorDto autorNomeDTO, int idAutor)
@@ -29,7 +26,9 @@ namespace Services
                 if (validarAutor)
                     return response.Erro("AUTOR JÁ CADASTRADO");
 
-                var autorAtualizado = await _autorRepository.AtualizarAutor(autorNomeDTO, idAutor);
+                Autor autor = new Autor(autorNomeDTO.Nome);
+
+                var autorAtualizado = await _autorRepository.AtualizarAutor(autor, idAutor);
                 if (!autorAtualizado)
                     return response.Erro("ERRO AO ATUALIZAR AUTOR");
 
@@ -53,8 +52,10 @@ namespace Services
                 if (validarAutor)
                     return response.Erro("AUTOR JÁ CADASTRADO");
 
-                var autor = await _autorRepository.InserirAutor(autorNomeDTO);
-                if (!autor)
+                Autor autor = new Autor(autorNomeDTO.Nome);
+
+                var autorCadastrado = await _autorRepository.InserirAutor(autor);
+                if (!autorCadastrado)
                     return response.Erro("ERRO AO INSERIR AUTOR");
 
                 return response.Sucesso(autorNomeDTO, "AUTOR CADASTRADO COM SUCESSO");
@@ -92,8 +93,7 @@ namespace Services
                 if (autor == null)
                     return response.Sucesso(null, "AUTOR NÃO ENCONTRADO!");
 
-                var autorMapeado = _mapper.Map<ListarAutorPorNomeDto>(autor);
-                return response.Sucesso(autorMapeado, "BUSCA REALIZADA COM SUCESSO");
+                return response.Sucesso(autor, "BUSCA REALIZADA COM SUCESSO");
             }
             catch (Exception ex)
             {
@@ -111,8 +111,7 @@ namespace Services
                 if (!autores.Any())
                     return response.Sucesso(null, "AUTORES NÃO ENCONTRADOS");
 
-                var autoresMapeado = _mapper.Map<IEnumerable<ListarAutoresDto>>(autores);
-                return response .Sucesso(autoresMapeado, "BUSCA REALIZADA COM SUCESSO");
+                return response .Sucesso(autores, "BUSCA REALIZADA COM SUCESSO");
             }
             catch (Exception ex)
             {

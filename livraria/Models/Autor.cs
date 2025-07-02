@@ -7,5 +7,14 @@
         public string Nome { get; set; } = string.Empty;
 
         public bool StatusAutor { get; set; }
+
+        public Autor()
+        {         
+        }
+
+        public Autor(string nome)
+        {
+            Nome = nome;
+        }
     }
 }

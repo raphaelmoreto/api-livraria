@@ -58,7 +58,7 @@ namespace Controllers
 
             return Ok(new
             {
-                mensage = resultado.Notificacao,
+                mensagem = resultado.Notificacao,
                 dados = resultado.Dados
             });
         }
