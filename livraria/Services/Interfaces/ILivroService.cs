@@ -1,18 +1,18 @@
-﻿//using Dtos.Livro;
-//using Services;
+﻿using Dtos.Livro;
+using Services;
 
-//namespace Service.InterfaceLivro
-//{
-//    public interface ILivroService
-//    {
-//        Task<Response<AtualizarLivroDto>> AtualizarLivro(AtualizarLivroDto livro, int idLivro);
+namespace Service.InterfaceLivro
+{
+    public interface ILivroService
+    {
+        //Task<Response<AtualizarLivroDto>> AtualizarLivro(AtualizarLivroDto livro, int idLivro);
 
-//        Task<Response<CadastrarLivroDto>> CadastrarLivro(CadastrarLivroDto livro);
+        //Task<Response<IEnumerable<ListarLivrosPorAutor>>> BuscarLivrosPorAutor(string nomeAutor);
 
-//        Task<Response<IEnumerable<ListarLivrosDto>>> BuscarTodosLivros();
+        //Task<Response<ListarLivroPorNome>> BuscarLivroPorNome(string livroNome);
 
-//        Task<Response<ListarLivroPorNome>> BuscarLivroPorNome(string livroNome);
+        //Task<Response<IEnumerable<ListarLivrosDto>>> BuscarTodosLivros();
 
-//        Task<Response<IEnumerable<ListarLivrosPorAutor>>> BuscarLivrosPorAutor(string nomeAutor);
-//    }
-//}
+        Task<Response<CadastrarLivroDto>> CadastrarLivro(CadastrarLivroDto livroDTO);
+    }
+}

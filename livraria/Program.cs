@@ -1,7 +1,7 @@
 using Database;
 using Service.InterfaceAutor;
 using Repository.InterfaceAutor;
-//using Service.InterfaceLivro;
+using Service.InterfaceLivro;
 using Repository.InterfaceLivro;
 using Database.Interface;
 
@@ -21,7 +21,7 @@ builder.Services.AddScoped<IDatabaseConnection, DatabaseConnection>();
 
 builder.Services.AddScoped<IAutorService, Services.AutorService>();
 builder.Services.AddScoped<IAutorRepository, Repositorys.AutorRepository>();
-//builder.Services.AddScoped<ILivroService, Services.LivroService>();
+builder.Services.AddScoped<ILivroService, Services.LivroService>();
 builder.Services.AddScoped<ILivroRepository, Repositorys.LivroRepository>();
 
 var app = builder.Build();

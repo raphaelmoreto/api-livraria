@@ -33,28 +33,13 @@ namespace Controllers
             });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> PostAutor([FromBody] CadastrarAutorDto autorNomeDTO)
-        {
-            var resultado = await _autorService.CadastrarAutor(autorNomeDTO);
-
-            if (!resultado.StatusResponse)
-                return Conflict(new { erros = resultado.Notificacao });
-
-            return Ok(new
-            {
-                mensagem = resultado.Notificacao,
-                dados = resultado.Dados
-            });
-        }
-
         [HttpGet("por-nome")]
         public async Task<IActionResult> GetAutorPorNome([FromQuery] string autorNome)
         {
             var resultado = await _autorService.ObterAutorPorNome(autorNome);
 
             if (!resultado.StatusResponse)
-                return Conflict(new { erros = resultado.Notificacao});
+                return Conflict(new { erros = resultado.Notificacao });
 
             return Ok(new
             {
@@ -69,7 +54,22 @@ namespace Controllers
             var resultado = await _autorService.ObterTodosAutores();
 
             if (!resultado.StatusResponse)
-                return Conflict(new { erros = resultado.Notificacao});
+                return Conflict(new { erros = resultado.Notificacao });
+
+            return Ok(new
+            {
+                mensagem = resultado.Notificacao,
+                dados = resultado.Dados
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostAutor([FromBody] CadastrarAutorDto autorNomeDTO)
+        {
+            var resultado = await _autorService.CadastrarAutor(autorNomeDTO);
+
+            if (!resultado.StatusResponse)
+                return Conflict(new { erros = resultado.Notificacao });
 
             return Ok(new
             {

@@ -1,4 +1,5 @@
-﻿using Dtos.Livro;
+﻿using Models;
+using Dtos.Livro;
 using Database.Interface;
 using Repository.InterfaceLivro;
 using System.Text;
@@ -14,7 +15,7 @@ namespace Repositorys
             _dbConnection = dbConnection;
         }
 
-        public async Task<bool> AtualizarLivro(AtualizarLivroDto livro, int idLivro)
+        public async Task<bool> AtualizarLivro(Livro livro)
         {
             using var connection = _dbConnection.GetConnection();
 
@@ -28,14 +29,14 @@ namespace Repositorys
             {
                 titulo = livro.Titulo.ToUpper(),
                 anoPublicacao = livro.AnoPublicacao,
-                id = idLivro
+                id = livro.Id
             };
 
             var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), parameters);
             return linhasAfetadas > 0;
         }
 
-        public async Task<bool> InserirLivro(CadastrarLivroDto livro)
+        public async Task<bool> InserirLivro(Livro livro)
         {
             using var connection = _dbConnection.GetConnection();
 
@@ -98,11 +99,11 @@ namespace Repositorys
             using var connection = _dbConnection.GetConnection();
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("SELECT COUNT(titulo)");
+            sb.AppendLine("SELECT COUNT(*)");
             sb.AppendLine("FROM livro");
-            sb.AppendLine("WHERE titulo = @nomeLivro;");
+            sb.AppendLine("WHERE UPPER(titulo) = @nomeLivro;");
 
-            var retorno = await connection.QueryFirstOrDefaultAsync<int?>(sb.ToString(), new { nomeLivro });
+            var retorno = await connection.ExecuteScalarAsync<int>(sb.ToString(), new { nomeLivro = nomeLivro.ToUpper() });
             return retorno > 0;
         }
     }

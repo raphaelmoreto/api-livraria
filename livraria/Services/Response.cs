@@ -1,4 +1,6 @@
-﻿namespace Services
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace Services
 {
     public class Response<T>
     {
@@ -10,23 +12,21 @@
 
         public Response<T> Sucesso(T? dados, string? notificacao = null)
         {
-            var response = new Response<T>
-            {
-                Dados = dados,
-                StatusResponse = true
-            };
+            Dados = dados;
+            StatusResponse = true;
 
             if (!string.IsNullOrEmpty(notificacao))
-                response.Notificacao.Add(notificacao);
+                Notificacao.Add(notificacao);
 
-            return response;
+            return this; //USAR O "this" PARA QUE NÃO RETORNE UMA "response" ATUALIZADA
         }
 
         public Response<T> Erro(params string[] notificacao)
         {
-            var response = new Response<T>();
-            response.Notificacao.AddRange(notificacao);
-            return response;
+            Notificacao.AddRange(notificacao);
+            return this;
         }
+
+        public bool TemNotificacao() => Notificacao.Count != 0;
     }
 }
