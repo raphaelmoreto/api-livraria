@@ -67,15 +67,17 @@ namespace Repositorys
             using var connection = _dbConnection.GetConnection();
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("SELECT l.id,");
-            sb.AppendLine("           l.titulo,");
+            sb.AppendLine("SELECT l.titulo,");
             sb.AppendLine("           l.ano_publicacao AS 'anoPublicacao',");
-            sb.AppendLine("           a.nome AS 'autor'");
+            sb.AppendLine("           CASE");
+            sb.AppendLine("                  WHEN a.nome IS NULL OR a.nome = '' THEN 'ANÔNIMO'");
+            sb.AppendLine("                  ELSE a.nome");
+            sb.AppendLine("           END AS 'autor'");
             sb.AppendLine("FROM livro l");
-            sb.AppendLine("INNER JOIN autor a ON l.fk_autor = a.id");
+            sb.AppendLine("LEFT JOIN autor a ON l.fk_autor = a.id");
             sb.AppendLine("WHERE l.titulo = @livroNome;");
 
-            var livro = await connection.QueryFirstOrDefaultAsync<ListarLivroPorNome>(sb.ToString(), new { livroNome });
+            var livro = await connection.QueryFirstOrDefaultAsync<ListarLivroPorNome?>(sb.ToString(), new { livroNome = livroNome.ToUpper() });
             return livro;
         }
 
@@ -84,13 +86,15 @@ namespace Repositorys
             using var connection = _dbConnection.GetConnection();
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("SELECT l.id,");
-            sb.AppendLine("           l.titulo,");
-            sb.AppendLine("           l.ano_publicacao AS anoPublicacao,");
-            sb.AppendLine("           a.nome AS autor");
+            sb.AppendLine("SELECT l.titulo,");
+            sb.AppendLine("           l.ano_publicacao AS 'anoPublicacao',");
+            sb.AppendLine("           CASE");
+            sb.AppendLine("                  WHEN a.nome IS NULL OR a.nome = '' THEN 'ANÔNIMO'");
+            sb.AppendLine("                  ELSE a.nome");
+            sb.AppendLine("           END AS 'autor'");
             sb.AppendLine("FROM livro l");
-            sb.AppendLine("INNER JOIN autor a ON l.fk_autor = a.id");
-            sb.AppendLine("ORDER BY l.titulo;");
+            sb.AppendLine("LEFT JOIN autor a ON l.fk_autor = a.id");
+            sb.AppendLine("ORDER BY l.titulo");
 
             var livros = await connection.QueryAsync<ListarLivrosDto>(sb.ToString());
             return livros;

@@ -9,9 +9,9 @@ namespace Service.InterfaceLivro
 
         //Task<Response<IEnumerable<ListarLivrosPorAutor>>> BuscarLivrosPorAutor(string nomeAutor);
 
-        //Task<Response<ListarLivroPorNome>> BuscarLivroPorNome(string livroNome);
+        Task<Response<ListarLivroPorNome>> BuscarLivroPorNome(string livroNome);
 
-        //Task<Response<IEnumerable<ListarLivrosDto>>> BuscarTodosLivros();
+        Task<Response<IEnumerable<ListarLivrosDto>>> BuscarTodosLivros();
 
         Task<Response<CadastrarLivroDto>> CadastrarLivro(CadastrarLivroDto livroDTO);
     }

@@ -59,58 +59,43 @@ namespace Services
         //    throw new NotImplementedException();
         //}
 
-        //public async Task<Response<ListarLivroPorNome>> BuscarLivroPorNome(string livroNome)
-        //{
-        //    Response<ListarLivroPorNome> response = new Response<ListarLivroPorNome>();
+        public async Task<Response<ListarLivroPorNome>> BuscarLivroPorNome(string livroNome)
+        {
+            Response<ListarLivroPorNome> response = new Response<ListarLivroPorNome>();
 
-        //    try
-        //    {
-        //        var livro = await _livroRepository.SelecionarLivroPorNome(livroNome);
+            try
+            {
+                var livro = await _livroRepository.SelecionarLivroPorNome(livroNome);
 
-        //        if (livro == null)
-        //        {
-        //            response.Mensagem = "LIVRO NÃO ENCONTRADO";
-        //            return response;
-        //        }
+                if (livro == null)
+                    return response.Sucesso(null, "LIVRO NÃO ENCONTRADO");
 
-        //        var livroMapeado = _mapper.Map<ListarLivroPorNome>(livro);
-        //        response.Dados = livroMapeado;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Mensagem = ex.Message;
-        //        response.Status = false;
-        //        return response;
-        //    }
-        //}
+                return response.Sucesso(livro, "BUSCA REALIZADA COM SUCESSO");
+            }
+            catch (Exception ex)
+            {
+                return response.Erro("ERRO INTERNO: " + ex.Message);
+            }
+        }
 
-        //public async Task<Response<IEnumerable<ListarLivrosDto>>> BuscarTodosLivros()
-        //{
-        //    Response<IEnumerable<ListarLivrosDto>> response = new Response<IEnumerable<ListarLivrosDto>>();
+        public async Task<Response<IEnumerable<ListarLivrosDto>>> BuscarTodosLivros()
+        {
+            Response<IEnumerable<ListarLivrosDto>> response = new Response<IEnumerable<ListarLivrosDto>>();
 
-        //    try
-        //    {
-        //        var listaLivros = await _livroRepository.SelecionarTodosLivros();
+            try
+            {
+                var listaLivros = await _livroRepository.SelecionarTodosLivros();
 
-        //        if (listaLivros == null)
-        //        {
-        //            response.Mensagem = "NENHUM LIVRO ENCONTRADO!";
-        //            response.Status = true;
-        //            return response;
-        //        }
+                if (listaLivros == null)
+                    return response.Sucesso(null, "LIVROS NÃO ENCONTRADO");
 
-        //        var livrosMapeado = _mapper.Map<IEnumerable<ListarLivrosDto>>(listaLivros);
-        //        response.Dados = livrosMapeado;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Mensagem = ex.Message;
-        //        response.Status = false;
-        //        return response;
-        //    }
-        //}
+                return response.Sucesso(listaLivros, "BUSCA REALIZADA COM SUCESSO");
+            }
+            catch (Exception ex)
+            {
+                return response.Erro("ERRO INTERNO: " + ex.Message);
+            }
+        }
 
         public async Task<Response<CadastrarLivroDto>> CadastrarLivro(CadastrarLivroDto livroDTO)
         {

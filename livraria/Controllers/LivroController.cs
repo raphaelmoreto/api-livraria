@@ -15,31 +15,37 @@ namespace Controllers
             _livroService = livroService;
         }
 
-        //[HttpGet("buscar-por-nome")]
-        //public async Task<IActionResult> GetLivroPorNome([FromQuery] string livroNome)
-        //{
-        //    var result = await _livroService.BuscarLivroPorNome(livroNome);
+        [HttpGet("buscar-por-nome")]
+        public async Task<IActionResult> GetLivroPorNome([FromQuery] string livroNome)
+        {
+            var resultado = await _livroService.BuscarLivroPorNome(livroNome);
 
-        //    if (!result.Status)
-        //    {
-        //        return Ok(result);
-        //    }
+            if (!resultado.StatusResponse)
+                return Conflict(new { erros = resultado.Notificacao });
 
-        //    return Ok(result);
-        //}
+            return Ok(new
+            {
+                mensagem = resultado.Notificacao,
+                dados = resultado.Dados
+            });
+        }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetTodosLivros()
-        //{
-        //    var resultado = await _livroService.BuscarTodosLivros();
+        [HttpGet]
+        public async Task<IActionResult> GetTodosLivros()
+        {
+            var resultado = await _livroService.BuscarTodosLivros();
 
-        //    if (!resultado.Status)
-        //    {
-        //        return Ok(resultado);
-        //    }
+            if (!resultado.StatusResponse)
+            {
+                return Conflict(new { erros = resultado.Notificacao});
+            }
 
-        //    return Ok(resultado);
-        //}
+            return Ok(new
+            {
+                mensagem = resultado.Notificacao,
+                dados = resultado.Dados
+            });
+        }
 
         [HttpPost]
         public async Task<IActionResult> PostLivro([FromBody] CadastrarLivroDto livroDTO)
@@ -47,9 +53,7 @@ namespace Controllers
             var resultado = await _livroService.CadastrarLivro(livroDTO);
 
             if (!resultado.StatusResponse)
-            {
                 return Conflict(new { erros = resultado.Notificacao });
-            }
 
             return Ok(new
             {
@@ -64,9 +68,7 @@ namespace Controllers
             var resultado = await _livroService.AtualizarLivro(livro, idLivro);
 
             if (!resultado.StatusResponse)
-            {
                 return Conflict(new { erros = resultado.Notificacao });
-            }
 
             return Ok( new
             {
