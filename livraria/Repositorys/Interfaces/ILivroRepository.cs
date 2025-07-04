@@ -9,7 +9,7 @@ namespace Repository.InterfaceLivro
 
         Task<bool> InserirLivro(Livro livro);
 
-        Task<IEnumerable<ListarLivrosPorAutor>> SelecionarLivroPorAutor(string nomeAutor);
+        Task<IEnumerable<ListarLivrosPorAutor>> SelecionarLivrosPorAutor(string nomeAutor);
 
         Task<ListarLivroPorNome?> SelecionarLivroPorNome(string livroNome);
 

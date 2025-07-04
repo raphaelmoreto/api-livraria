@@ -30,6 +30,21 @@ namespace Controllers
             });
         }
 
+        [HttpGet("por-autor")]
+        public async Task<IActionResult> GetLivrosPorAutor([FromQuery] string nomeAutor)
+        {
+            var resultado = await _livroService.BuscarLivrosPorAutor(nomeAutor);
+
+            if (!resultado.StatusResponse)
+                return Conflict(new { erros = resultado.Notificacao});
+
+            return Ok(new
+            {
+                mensagem = resultado.Notificacao,
+                dados = resultado.Dados
+            });
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetTodosLivros()
         {

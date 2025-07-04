@@ -57,9 +57,23 @@ namespace Repositorys
             return linhasAfetadas > 0;
         }
 
-        public Task<IEnumerable<ListarLivrosPorAutor>> SelecionarLivroPorAutor(string nomeAutor)
+        public async Task<IEnumerable<ListarLivrosPorAutor>> SelecionarLivrosPorAutor(string nomeAutor)
         {
-            throw new NotImplementedException();
+            var connection = _dbConnection.GetConnection();
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("SELECT l.titulo,");
+            sb.AppendLine("           l.ano_publicacao AS 'anoPublicacao',");
+            sb.AppendLine("           CASE");
+            sb.AppendLine("                  WHEN a.nome IS NULL OR a.nome = '' THEN 'ANÔNIMO'");
+            sb.AppendLine("                  ELSE a.nome");
+            sb.AppendLine("           END AS 'autor'");
+            sb.AppendLine("FROM livro l");
+            sb.AppendLine("LEFT JOIN autor a ON l.fk_autor = a.id");
+            sb.AppendLine("WHERE a.nome = @nomeAutor");
+            sb.AppendLine("ORDER BY l.titulo;");
+
+            return await connection.QueryAsync<ListarLivrosPorAutor>(sb.ToString(), new { nomeAutor = nomeAutor.ToUpper() });
         }
 
         public async Task<ListarLivroPorNome?> SelecionarLivroPorNome(string livroNome)
@@ -77,8 +91,7 @@ namespace Repositorys
             sb.AppendLine("LEFT JOIN autor a ON l.fk_autor = a.id");
             sb.AppendLine("WHERE l.titulo = @livroNome;");
 
-            var livro = await connection.QueryFirstOrDefaultAsync<ListarLivroPorNome?>(sb.ToString(), new { livroNome = livroNome.ToUpper() });
-            return livro;
+            return await connection.QueryFirstOrDefaultAsync<ListarLivroPorNome?>(sb.ToString(), new { livroNome = livroNome.ToUpper() });
         }
 
         public async Task<IEnumerable<ListarLivrosDto>> SelecionarTodosLivros()
@@ -96,8 +109,7 @@ namespace Repositorys
             sb.AppendLine("LEFT JOIN autor a ON l.fk_autor = a.id");
             sb.AppendLine("ORDER BY l.titulo");
 
-            var livros = await connection.QueryAsync<ListarLivrosDto>(sb.ToString());
-            return livros;
+            return await connection.QueryAsync<ListarLivrosDto>(sb.ToString());
         }
 
         public async Task<bool> VerificarSeExisteLivroPorNome(string nomeLivro)

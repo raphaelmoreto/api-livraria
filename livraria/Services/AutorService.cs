@@ -20,7 +20,10 @@ namespace Services
             try
             {
                 if (string.IsNullOrWhiteSpace(autorNomeDTO.Nome))
-                    return response.Erro("NOME DO AUTOR NÃO PODE SER NULO");
+                    response.Erro("NOME DO AUTOR NÃO PODE SER NULO");
+
+                if (response.TemNotificacao())
+                    return response;
 
                 var validarAutor = await _autorRepository.VerificarAutorPorNome(autorNomeDTO.Nome);
                 if (validarAutor)
@@ -46,7 +49,10 @@ namespace Services
             try
             {
                 if (string.IsNullOrWhiteSpace(autorNomeDTO.Nome))
-                    return response.Erro("NOME DO AUTOR NÃO PODE SER NULO");
+                    response.Erro("NOME DO AUTOR NÃO PODE SER NULO");
+
+                if (response.TemNotificacao())
+                    return response;
 
                 var validarAutor = await _autorRepository.VerificarAutorPorNome(autorNomeDTO.Nome);
                 if (validarAutor)

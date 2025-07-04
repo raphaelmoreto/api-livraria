@@ -54,10 +54,24 @@ namespace Services
             }
         }
 
-        //public Task<Response<IEnumerable<ListarLivrosPorAutor>>> BuscarLivrosPorAutor(string nomeAutor)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public async Task<Response<IEnumerable<ListarLivrosPorAutor>>> BuscarLivrosPorAutor(string nomeAutor)
+        {
+            Response<IEnumerable<ListarLivrosPorAutor>> response = new Response<IEnumerable<ListarLivrosPorAutor>>();
+
+            try
+            {
+                var livrosPorAutor = await _livroRepository.SelecionarLivrosPorAutor(nomeAutor);
+
+                if (livrosPorAutor == null)
+                    return response.Sucesso(null, "LIVROS NÃO ENCONTRADO");
+
+                return response.Sucesso(livrosPorAutor, "BUSCA REALIZADA COM SUCESSO");
+            }
+            catch (Exception ex)
+            {
+                return response.Erro("ERRO INTERNO: " + ex.Message);
+            }
+        }
 
         public async Task<Response<ListarLivroPorNome>> BuscarLivroPorNome(string livroNome)
         {

@@ -7,7 +7,7 @@ namespace Service.InterfaceLivro
     {
         Task<Response<AtualizarLivroDto>> AtualizarLivro(AtualizarLivroDto livro, int idLivro);
 
-        //Task<Response<IEnumerable<ListarLivrosPorAutor>>> BuscarLivrosPorAutor(string nomeAutor);
+        Task<Response<IEnumerable<ListarLivrosPorAutor>>> BuscarLivrosPorAutor(string nomeAutor);
 
         Task<Response<ListarLivroPorNome>> BuscarLivroPorNome(string livroNome);
 
