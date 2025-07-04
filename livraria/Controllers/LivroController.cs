@@ -58,17 +58,21 @@ namespace Controllers
             });
         }
 
-        //[HttpPut("{idLivro}")]
-        //public async Task<IActionResult> PutLivro([FromBody] AtualizarLivroDto livro, [FromRoute] int idLivro)
-        //{
-        //    var resultado = await _livroService.AtualizarLivro(livro, idLivro);
+        [HttpPut("{idLivro}")]
+        public async Task<IActionResult> PutLivro([FromBody] AtualizarLivroDto livro, [FromRoute] int idLivro)
+        {
+            var resultado = await _livroService.AtualizarLivro(livro, idLivro);
 
-        //    if (!resultado.Status)
-        //    {
-        //        return Ok(resultado);
-        //    }
+            if (!resultado.StatusResponse)
+            {
+                return Conflict(new { erros = resultado.Notificacao });
+            }
 
-        //    return Ok(resultado);
-        //}
+            return Ok( new
+            {
+                mensagem = resultado.Notificacao,
+                dados = resultado.Dados
+            });
+        }
     }
 }

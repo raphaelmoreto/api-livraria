@@ -22,14 +22,16 @@ namespace Repositorys
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("UPDATE livro");
             sb.AppendLine("SET titulo = @titulo,");
-            sb.AppendLine("      ano_publicacao = @anoPublicacao");
+            sb.AppendLine("      ano_publicacao = @anoPublicacao,");
+            sb.AppendLine("      fk_autor = @idAutor");
             sb.AppendLine("WHERE id = @id;");
 
             var parameters = new
             {
+                id = livro.Id,
                 titulo = livro.Titulo.ToUpper(),
                 anoPublicacao = livro.AnoPublicacao,
-                id = livro.Id
+                idAutor = livro.IdAutor
             };
 
             var linhasAfetadas = await connection.ExecuteAsync(sb.ToString(), parameters);

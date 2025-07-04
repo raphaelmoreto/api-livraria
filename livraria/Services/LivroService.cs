@@ -15,58 +15,44 @@ namespace Services
             _livroRepository = livroRepository;
         }
 
-        //public async Task<Response<AtualizarLivroDto>> AtualizarLivro(AtualizarLivroDto livro, int idLivro)
-        //{
-        //    Response<AtualizarLivroDto> response = new Response<AtualizarLivroDto>();
+        public async Task<Response<AtualizarLivroDto>> AtualizarLivro(AtualizarLivroDto livroDTO, int idLivro)
+        {
+            Response<AtualizarLivroDto> response = new Response<AtualizarLivroDto>();
 
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(livro.Titulo))
-        //        {
-        //            response.Mensagem = "TÍTULO NÃO PODE SER NULO/VÁZIO";
-        //            response.Status = false;
-        //            return response;
-        //        }
+            try
+            {
+                if (string.IsNullOrWhiteSpace(livroDTO.Titulo))
+                    response.Erro("TÍTULO DO LIVRO NÃO PODE SER NULO");
 
-        //        if (livro.AnoPublicacao.HasValue)
-        //        {
-        //            if (livro.AnoPublicacao > DateTime.Now)
-        //            {
-        //                response.Mensagem = "DATA DE PUBLICAÇÃO DO LIVRO NÃO PODE SER MAIOR QUE A DATA ATUAL";
-        //                response.Status = false;
-        //                return response;
-        //            }
-        //        }
+                if (livroDTO.AnoPublicacao.HasValue) //VERIFICAR UMA FORMA DE PODER VIR NULO
+                {
+                    if (livroDTO.AnoPublicacao > DateTime.Now)
+                        response.Erro("ANO DE PUBLICAÇÃO NÃO PODE SER MAIOR QUE A DATA ATUAL");
+                }
 
-        //        var verificarLivro = await _livroRepository.VerificarSeExisteLivroPorNome(livro.Titulo);
+                if (idLivro is 0)
+                    response.Erro("ID NÃO INFORMADO");
 
-        //        if (verificarLivro)
-        //        {
-        //            response.Mensagem = "LIVRO JÁ CADASTRADO";
-        //            response.Status = false;
-        //            return response;
-        //        }
+                if (response.TemNotificacao())
+                    return response;
 
-        //        var livroAtualizado = await _livroRepository.AtualizarLivro(livro, idLivro);
+                var validarLivro = await _livroRepository.VerificarSeExisteLivroPorNome(livroDTO.Titulo);
+                if (validarLivro)
+                    return response.Erro("LIVRO JÁ CADASTRADO");
 
-        //        if (!livroAtualizado)
-        //        {
-        //            response.Mensagem = "ERRO AO ATUALIZAR LIVRO";
-        //            response.Status = false;
-        //            return response;
-        //        }
+                Livro livro = new Livro(livroDTO.Titulo, livroDTO.AnoPublicacao, livroDTO.IdAutor, idLivro);
 
-        //        response.Mensagem = "LIVRO ATUALIZADO";
-        //        response.Status = livroAtualizado;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Mensagem = ex.Message;
-        //        response.Status = false;
-        //        return response;
-        //    }
-        //}
+                var livroAtualizado = await _livroRepository.AtualizarLivro(livro);
+                if (!livroAtualizado)
+                    return response.Erro("ERRO AO ATUALIZAR LIVRO!");
+
+                return response.Sucesso(livroDTO, "LIVRO ATUALIZADO COM SUCESSO");
+            }
+            catch (Exception ex)
+            {
+                return response.Erro("ERRO INTERNO: " + ex.Message);
+            }
+        }
 
         //public Task<Response<IEnumerable<ListarLivrosPorAutor>>> BuscarLivrosPorAutor(string nomeAutor)
         //{
@@ -139,11 +125,6 @@ namespace Services
                 {
                     if (livroDTO.AnoPublicacao > DateTime.Now)
                         response.Erro("ANO DE PUBLICAÇÃO NÃO PODE SER MAIOR QUE A DATA ATUAL");
-                }
-
-                if (livroDTO.IdAutor == 0)
-                {
-                    livroDTO.IdAutor = null;
                 }
 
                 if (response.TemNotificacao())

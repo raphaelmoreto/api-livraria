@@ -10,7 +10,7 @@
         
         public int? IdAutor { get; private set; }
 
-        public Livro(string titulo, DateTime? anoPublicacao = null, int? idAutor = null)
+        public Livro(string titulo, DateTime? anoPublicacao = null, int? idAutor = null, int? idLivro = null)
         {
             Titulo = titulo;
 
@@ -21,7 +21,15 @@
 
             if (idAutor.HasValue)
             {
-                IdAutor = idAutor.Value;
+                if (idAutor.Value == 0)
+                    IdAutor = null;
+                else
+                    IdAutor = idAutor.Value;
+            }
+
+            if (idLivro.HasValue)
+            {
+                Id = idLivro.Value;
             }
         }
     }
